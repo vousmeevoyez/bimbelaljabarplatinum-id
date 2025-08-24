@@ -53,7 +53,7 @@
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
-      "service": "bimbelaljabarplatinum-id-template"
+      "service": "bimbelaljabarplatinum-id"
     }
   ],
   "durable_objects": {
