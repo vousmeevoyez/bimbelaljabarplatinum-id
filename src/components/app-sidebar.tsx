@@ -5,13 +5,7 @@ import type { Route } from 'next'
 
 import {
   Building2,
-  Frame,
-  Map,
-  PieChart,
-  Settings2,
-  ShoppingCart,
   SquareTerminal,
-  CreditCard,
   Users,
 } from "lucide-react"
 

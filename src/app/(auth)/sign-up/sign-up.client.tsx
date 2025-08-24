@@ -21,7 +21,6 @@ import Link from "next/link";
 import SSOButtons from "../_components/sso-buttons";
 import { useState } from "react";
 import { startRegistration } from "@simplewebauthn/browser";
-import { KeyIcon } from 'lucide-react'
 import { useConfigStore } from "@/state/config";
 import { REDIRECT_AFTER_SIGN_IN } from "@/constants";
 

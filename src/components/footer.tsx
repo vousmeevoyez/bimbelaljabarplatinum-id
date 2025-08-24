@@ -72,7 +72,7 @@ export function Footer() {
           <div className="mt-6 pt-6 md:mt-8 md:pt-8 border-t">
             <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between md:gap-4">
               <p className="text-sm text-muted-foreground text-center md:text-left">
-                © {new Date().getFullYear()} Kelvin Desman. All rights reserved.
+                 © {new Date().getFullYear()} {SITE_NAME}. All rights reserved.
               </p>
 
               <div className="flex flex-col md:flex-row items-center gap-4 md:space-x-4">
