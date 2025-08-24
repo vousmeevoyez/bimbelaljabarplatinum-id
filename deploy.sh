@@ -10,5 +10,5 @@ export D1_DATABASE_ID
 echo "Using database: $D1_DATABASE_NAME (ID: $D1_DATABASE_ID)"
 
 pnpm run db:migrate:dev
-d1 migrations apply "$D1_DATABASE_NAME" --remote
+npx wrangler d1 migrations apply "$D1_DATABASE_NAME" --remote
 pnpm run deploy
