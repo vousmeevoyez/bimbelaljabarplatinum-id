@@ -20,8 +20,12 @@
 	},
   "routes": [
     {
-      "pattern": "bimbelaljabarplatinum.id",
-      "custom_domain": true
+      "pattern": "bimbelaljabarplatinum.id/*",
+      "zone_name": "bimbelaljabarplatinum.id"
+    },
+    {
+      "pattern": "www.bimbelaljabarplatinum.id/*",
+      "zone_name": "bimbelaljabarplatinum.id"
     }
   ]
 	/**
