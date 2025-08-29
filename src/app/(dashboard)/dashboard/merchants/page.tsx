@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { PlusIcon, Users } from "lucide-react";
 import type { Route } from "next";
 import { PageHeader } from "@/components/page-header";
-import { PendingInvitations } from "./pending-invitations";
 import { getMerchantsAction, deleteMerchantAction } from "@/actions/merchant-actions";
 import { DeleteConfirmation } from "@/components/delete-confirmation";
 import { getPresignedR2Url } from "@/lib/s3";
@@ -61,8 +60,6 @@ export default async function MerchantsIndexPage() {
             </Link>
           </Button>
         </div>
-
-        <PendingInvitations />
 
         {merchants.length === 0 ? (
           <Card className="border-dashed border-2">
