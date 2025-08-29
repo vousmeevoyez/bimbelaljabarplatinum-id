@@ -3,6 +3,7 @@
 import Link from "next/link"
 import type { Route } from 'next'
 import { usePathname } from "next/navigation"
+import Image from 'next/image'
 import { ComponentIcon, Menu } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -15,6 +16,25 @@ import { SITE_NAME } from "@/constants"
 type NavItem = {
   name: string;
   href: Route;
+}
+
+const ActionButtons = () => {
+  const { session, isLoading } = useSessionStore()
+  const { setIsOpen } = useNavStore()
+
+  if (isLoading) {
+    return <Skeleton className="h-10 w-[80px] bg-primary" />
+  }
+
+  if (session) {
+    return null;
+  }
+
+  return (
+    <Button asChild onClick={() => setIsOpen(false)}>
+      <Link href="/sign-in">Sign In</Link>
+    </Button>
+  )
 }
 
 export function Navigation() {
@@ -43,7 +63,7 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="text-xl md:text-2xl font-bold text-primary flex items-center gap-2 md:gap-3">
-              <ComponentIcon className="w-6 h-6 md:w-7 md:h-7" />
+              <Image src="/LOGO.png" alt="logo" className="w-6 h-6 md:w-7 md:h-7" width="100" height="100"/>
               {SITE_NAME}
             </Link>
           </div>
@@ -70,6 +90,7 @@ export function Navigation() {
                 ))
               )}
             </div>
+            <ActionButtons />
           </div>
           <div className="md:hidden flex items-center">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -103,6 +124,9 @@ export function Navigation() {
                             {item.name}
                           </Link>
                         ))}
+                        <div className="px-3 pt-4">
+                          <ActionButtons />
+                        </div>
                       </>
                     )}
                   </div>

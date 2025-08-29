@@ -95,5 +95,11 @@
       "pattern": "www.bimbelaljabarplatinum.id/*",
       "zone_name": "bimbelaljabarplatinum.id"
     }
+  ],
+  "r2_buckets": [
+    {
+      "bucket_name": "prod-bimbelaljabarplatinum-id",
+      "binding": "prod_bimbelaljabarplatinum_id"
+    }
   ]
 }

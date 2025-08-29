@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text, index } from "drizzle-orm/sqlite-core";
+import { sqliteTable, integer, text, index, unique } from "drizzle-orm/sqlite-core";
 import { relations, sql } from "drizzle-orm";
 import { type InferSelectModel } from "drizzle-orm";
 
@@ -352,6 +352,56 @@ export const passKeyCredentialRelations = relations(passKeyCredentialTable, ({ o
     references: [userTable.id],
   }),
 }));
+
+// custom
+// --- merchants ---
+export const merchantTable = sqliteTable(
+  "merchant",
+  {
+    ...commonColumns,
+    id: text().primaryKey().$defaultFn(() => `mer_${createId()}`).notNull(),
+    name: text({ length: 255 }).notNull(),
+    slug: text({ length: 100 }).notNull(), // public, unique
+    logoUrl: text({ length: 600 }),
+  },
+  (table) => ({
+    nameIdx: index("merchant_name_idx").on(table.name),
+    slugUq: unique("merchant_slug_uq").on(table.slug), // globally unique slug
+  })
+);
+
+export const productTable = sqliteTable(
+  "product",
+  {
+    ...commonColumns,
+    id: text().primaryKey().$defaultFn(() => `prod_${createId()}`).notNull(),
+    merchantId: text().notNull().references(() => merchantTable.id, { onDelete: "cascade" }),
+    name: text({ length: 255 }).notNull(),
+    slug: text({ length: 150 }).notNull(), // per-merchant slug
+    priceCents: integer().notNull(),
+  },
+  (table) => ({
+    merchantIdx: index("product_merchant_idx").on(table.merchantId),
+    nameIdx: index("product_name_idx").on(table.name),
+    merchantSlugUq: unique("product_merchant_slug_uq").on(table.merchantId, table.slug), // unique per merchant
+  })
+);
+
+// define relations AFTER both tables are declared
+export const merchantRelations = relations(merchantTable, ({ many }) => ({
+  products: many(productTable),
+}));
+
+export const productRelations = relations(productTable, ({ one }) => ({
+  merchant: one(merchantTable, {
+    fields: [productTable.merchantId],
+    references: [merchantTable.id],
+  }),
+}));
+
+// --- (optional) handy types ---
+export type Merchant = InferSelectModel<typeof merchantTable>;
+export type Product = InferSelectModel<typeof productTable>;
 
 export type User = InferSelectModel<typeof userTable>;
 export type PassKeyCredential = InferSelectModel<typeof passKeyCredentialTable>;

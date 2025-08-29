@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  remotePatterns: [new URL('http://localhost:4566/**')],
 };
 
 export default nextConfig;

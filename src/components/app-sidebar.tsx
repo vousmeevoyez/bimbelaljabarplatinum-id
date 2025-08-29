@@ -6,18 +6,17 @@ import type { Route } from 'next'
 import {
   Building2,
   SquareTerminal,
-  Users,
+  School2,
+  ShoppingBag
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
 import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
-  SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { useSessionStore } from "@/state/session"
@@ -84,9 +83,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         isActive: true,
       },
       {
-        title: "Teams",
-        url: "/dashboard/teams" as Route,
-        icon: Users,
+        title: "Merchants",
+        url: "/dashboard/merchants" as Route,
+        icon: School2,
+      },
+      {
+        title: "Products",
+        url: "/dashboard/products" as Route,
+        icon: ShoppingBag,
       },
     ],
     projects: [
@@ -96,12 +100,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      {data?.teams?.length > 0 && (
-        <SidebarHeader>
-          <TeamSwitcher teams={data.teams} />
-        </SidebarHeader>
-      )}
-
       <SidebarContent>
         <NavMain items={data.navMain} />
         {data.projects.length > 0 && <NavProjects projects={data.projects} />}
