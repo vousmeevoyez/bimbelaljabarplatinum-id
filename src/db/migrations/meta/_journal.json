@@ -71,6 +71,13 @@
       "when": 1756283487496,
       "tag": "0009_add-merchant-products",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1756450983245,
+      "tag": "0010_add-description",
+      "breakpoints": true
     }
   ]
 }

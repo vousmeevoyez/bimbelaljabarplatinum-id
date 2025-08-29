@@ -43,10 +43,10 @@ export function CreateMerchantForm() {
     onStart: () => {
       toast.loading("Creating merchant...");
     },
-    onSuccess: (result) => {
+    onSuccess: () => {
       toast.dismiss();
       toast.success("Merchant created successfully");
-      router.push(`/dashboard/merchants/${result.data.data.slug}` as Route);
+      router.push(`/dashboard/merchants` as Route);
       router.refresh();
     }
   });
@@ -59,7 +59,7 @@ export function CreateMerchantForm() {
   function onSubmit(data: FormValues) {
     createMerchant({
       name: data.name,
-      description: data.description || undefined,
+      description: data.description?? undefined,
       logo: data.logoUrl ?? undefined,
     });
   }

@@ -361,6 +361,7 @@ export const merchantTable = sqliteTable(
     ...commonColumns,
     id: text().primaryKey().$defaultFn(() => `mer_${createId()}`).notNull(),
     name: text({ length: 255 }).notNull(),
+    description: text({ length: 255 }),
     slug: text({ length: 100 }).notNull(), // public, unique
     logoUrl: text({ length: 600 }),
   },

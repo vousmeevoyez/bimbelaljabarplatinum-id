@@ -16,7 +16,18 @@ const nextConfig = {
   },
   typescript: {
     ignoreBuildErrors: process.env.SKIP_LINTER === 'true'
-  }
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '4566',
+        // Narrow if you like; query params are ignored by this matcher.
+        pathname: '/my-bucket-name/uploads/**',
+      },
+    ],
+  },
 };
 
 export default process.env.ANALYZE === 'true'

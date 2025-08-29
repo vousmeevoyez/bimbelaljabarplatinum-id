@@ -11,13 +11,14 @@ import { updateAllSessionsOfUser } from "@/utils/kv-session";
 /**
  * Create a new merchant with the current user as owner
  */
-export async function createMerchant({
-  name,
-  logoUrl,
-}: {
+export async function createMerchant(
+  params
+: {
   name: string;
+  description: string;
   logoUrl?: string;
 }) {
+  const { name } = params;
   // Verify user is authenticated
   const session = await requireVerifiedEmail();
   if (!session) {
@@ -53,9 +54,8 @@ export async function createMerchant({
 
   // Insert the merchant
   const newMerchant = await db.insert(merchantTable).values({
-    name,
-    slug,
-    logoUrl,
+    ...params,
+    slug
   }).returning();
 
   const merchant = newMerchant?.[0];
@@ -70,8 +70,8 @@ export async function createMerchant({
   await updateAllSessionsOfUser(userId);
 
   return {
+    ...params,
     merchantId,
-    name,
     slug,
   };
 }
@@ -79,27 +79,24 @@ export async function createMerchant({
 /**
  * Update a merchant's details
  */
-export async function updateMerchant({
-  merchantId,
-  data
-}: {
+export async function updateMerchant(parameter
+: {
   merchantId: string;
-  data: {
     name?: string;
     logoUrl?: string;
-  };
 }) {
+  const {merchantId, name, logoUrl} = parameter;
   const db = getDB();
 
   // If name is being updated, check if we need to update the slug
-  if (data.name) {
+  if (name) {
     const currentMerchant = await db.query.merchantTable.findFirst({
       where: eq(merchantTable.id, merchantId),
     });
 
-    if (currentMerchant && currentMerchant.name !== data.name) {
+    if (currentMerchant && currentMerchant.name !== name) {
       // Generate new slug based on the new name
-      let newSlug = generateSlug(data.name);
+      let newSlug = generateSlug(name);
       let slugIsUnique = false;
       let attempts = 0;
 
@@ -116,7 +113,7 @@ export async function updateMerchant({
           slugIsUnique = true;
         } else {
           // Add a random suffix to make the slug unique
-          newSlug = `${generateSlug(data.name)}-${createId().substring(0, 4)}`;
+          newSlug = `${generateSlug(name)}-${createId().substring(0, 4)}`;
           attempts++;
         }
       }
@@ -128,21 +125,22 @@ export async function updateMerchant({
       // Update merchant with new slug
       await db.update(merchantTable)
         .set({
-          ...data,
+          ...parameter,
+        logoUrl,
           slug: newSlug,
         })
         .where(eq(merchantTable.id, merchantId));
 
-      return { ...data, slug: newSlug };
+      return { ...parameter, slug: newSlug };
     }
   }
 
   // Update merchant without changing slug
   await db.update(merchantTable)
-    .set(data)
+    .set(parameter)
     .where(eq(merchantTable.id, merchantId));
 
-  return data;
+  return parameter;
 }
 
 /**

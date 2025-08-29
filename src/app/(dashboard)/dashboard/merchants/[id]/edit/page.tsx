@@ -1,6 +1,6 @@
 import { redirect, notFound } from "next/navigation";
 import { getSessionFromCookie } from "@/utils/auth";
-import { EditMerchantForm } from "@/components/merchants/edit-merchant-form";
+import { EditMerchantForm, type Merchant } from "@/components/merchants/edit-merchant-form";
 import { getMerchantAction } from "@/actions/merchant-actions";
 import { PageHeader } from "@/components/page-header";
 import { getPresignedR2Url } from "@/lib/s3";
@@ -30,12 +30,12 @@ export default async function EditMerchantPage({params}: EditMerchantPageProps) 
 
   if (error) return notFound();
 
-  const merchant = {
-    ...result,
+  const merchant: Merchant = {
+    ...result.data,
     logoUrl: result.data.logoUrl
       ? await getPresignedR2Url(result.data.logoUrl)
       : undefined
-  }
+  };
 
   return (
     <>

@@ -1,0 +1,1 @@
+ALTER TABLE `merchant` ADD `description` text(255);

@@ -8,13 +8,16 @@ import { uploadToR2 } from "@/lib/s3";
 // Update merchant schema
 const updateMerchantSchema = z.object({
   merchantId: z.string().min(1, "Merchant ID is required"),
-  data: z.object({
-    name: z.string().min(1, "Name is required").max(100, "Name is too long").optional(),
-    description: z.string().max(1000, "Description is too long").optional(),
-    avatarUrl: z.string().url("Invalid avatar URL").max(600, "URL is too long").optional(),
-    billingEmail: z.string().email("Invalid email").max(255, "Email is too long").optional(),
-    settings: z.string().max(10000, "Settings are too large").optional(),
-  }),
+  name: z.string().min(1, "Name is required").max(100, "Name is too long").optional(),
+  description: z.string().max(1000, "Description is too long").optional(),
+  logo: z.instanceof(File)
+    .refine(file => file.type.startsWith("image/"), {
+      message: "Only image files are allowed",
+    })
+    .refine(file => file.size <= 2 * 1024 * 1024, {
+      message: "File must be 2MB or smaller",
+    })
+    .optional(),
 });
 
 const deleteMerchantSchema = z.object({
@@ -67,7 +70,9 @@ export const updateMerchantAction = createServerAction()
   .input(updateMerchantSchema)
   .handler(async ({ input }) => {
     try {
-      const result = await updateMerchant(input);
+      let logoUrl;
+      if(input.logo) logoUrl = await uploadToR2(input.logo)
+      const result = await updateMerchant({...input, logoUrl: logoUrl});
       return { success: true, data: result };
     } catch (error) {
       console.error("Failed to update merchant:", error);
