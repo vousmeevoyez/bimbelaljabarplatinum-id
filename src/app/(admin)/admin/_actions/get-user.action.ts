@@ -4,7 +4,7 @@ import { createServerAction } from "zsa"
 import { getDB } from "@/db"
 import { requireAdmin } from "@/utils/auth"
 import { z } from "zod"
-import { userTable, creditTransactionTable, passKeyCredentialTable } from "@/db/schema"
+import { userTable, passKeyCredentialTable } from "@/db/schema"
 import { eq, desc } from "drizzle-orm"
 
 const getUserSchema = z.object({
@@ -26,12 +26,6 @@ const getUserHandler = async ({ input }: { input: { userId: string } }) => {
     throw new Error("User not found")
   }
 
-  // Fetch user's credit transactions (last 10)
-  const transactions = await db.query.creditTransactionTable.findMany({
-    where: eq(creditTransactionTable.userId, userId),
-    orderBy: [desc(creditTransactionTable.createdAt)],
-    limit: 10,
-  })
 
   // Fetch user's passkey credentials
   const passkeys = await db.query.passKeyCredentialTable.findMany({
@@ -41,7 +35,6 @@ const getUserHandler = async ({ input }: { input: { userId: string } }) => {
 
   return {
     user,
-    transactions,
     passkeys,
   }
 }

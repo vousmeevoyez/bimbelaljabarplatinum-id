@@ -78,6 +78,20 @@
       "when": 1756450983245,
       "tag": "0010_add-description",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "6",
+      "when": 1756453697031,
+      "tag": "0011_cleanup-tables",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1756510471517,
+      "tag": "0012_add-url-description-product",
+      "breakpoints": true
     }
   ]
 }

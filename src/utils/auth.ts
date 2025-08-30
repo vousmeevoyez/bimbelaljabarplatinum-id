@@ -1,6 +1,6 @@
 import "server-only";
 
-import { ROLES_ENUM, userTable, teamMembershipTable, SYSTEM_ROLES_ENUM, teamRoleTable, TEAM_PERMISSIONS } from "@/db/schema";
+import { ROLES_ENUM, userTable } from "@/db/schema";
 import { init } from "@paralleldrive/cuid2";
 import { encodeHexLowerCase } from "@oslojs/encoding"
 import ms from "ms"
@@ -21,7 +21,6 @@ import { cache } from "react"
 import type { SessionValidationResult } from "@/types";
 import { SESSION_COOKIE_NAME } from "@/constants";
 import { ZSAError } from "zsa";
-import { addFreeMonthlyCreditsIfNeeded } from "./credits";
 import { getInitials } from "./name-initials";
 
 const getSessionLength = () => {
@@ -79,72 +78,6 @@ interface CreateSessionParams extends Pick<CreateKVSessionParams, "authenticatio
   token: string;
 }
 
-export async function getUserTeamsWithPermissions(userId: string) {
-  const db = getDB();
-
-  // Get user's team memberships
-  const userTeamMemberships = await db.query.teamMembershipTable.findMany({
-    where: eq(teamMembershipTable.userId, userId),
-    with: {
-      team: true,
-    },
-  });
-
-  // Fetch permissions for each membership
-  return Promise.all(
-    userTeamMemberships.map(async (membership) => {
-      let roleName = '';
-      let permissions: string[] = [];
-
-      // Handle system roles
-      if (membership.isSystemRole) {
-        roleName = membership.roleId; // For system roles, roleId contains the role name
-
-        // For system roles, get permissions based on role
-        if (membership.roleId === SYSTEM_ROLES_ENUM.OWNER || membership.roleId === SYSTEM_ROLES_ENUM.ADMIN) {
-          // Owners and admins have all permissions
-          permissions = Object.values(TEAM_PERMISSIONS);
-        } else if (membership.roleId === SYSTEM_ROLES_ENUM.MEMBER) {
-          // Default permissions for members
-          permissions = [
-            TEAM_PERMISSIONS.ACCESS_DASHBOARD,
-            TEAM_PERMISSIONS.CREATE_COMPONENTS,
-            TEAM_PERMISSIONS.EDIT_COMPONENTS,
-          ];
-        } else if (membership.roleId === SYSTEM_ROLES_ENUM.GUEST) {
-          // Guest permissions are limited
-          permissions = [
-            TEAM_PERMISSIONS.ACCESS_DASHBOARD,
-          ];
-        }
-      } else {
-        // Handle custom roles
-        const role = await db.query.teamRoleTable.findFirst({
-          where: eq(teamRoleTable.id, membership.roleId),
-        });
-
-        if (role) {
-          roleName = role.name;
-          // Parse the stored JSON permissions
-          permissions = role.permissions as string[];
-        }
-      }
-
-      return {
-        id: membership.teamId,
-        name: membership.team.name,
-        slug: membership.team.slug,
-        role: {
-          id: membership.roleId,
-          name: roleName,
-          isSystemRole: !!membership.isSystemRole,
-        },
-        permissions,
-      };
-    })
-  );
-}
-
 export async function createSession({
   token,
   userId,
@@ -160,8 +93,6 @@ export async function createSession({
     throw new Error("User not found");
   }
 
-  const teamsWithPermissions = await getUserTeamsWithPermissions(userId);
-
   return createKVSession({
     sessionId,
     userId,
@@ -169,7 +100,6 @@ export async function createSession({
     user,
     authenticationType,
     passkeyCredentialId,
-    teams: teamsWithPermissions
   });
 }
 
@@ -217,17 +147,6 @@ async function validateSessionToken(token: string, userId: string): Promise<Sess
     updatedSession.user.initials = getInitials(`${updatedSession.user.firstName} ${updatedSession.user.lastName}`);
 
     return updatedSession;
-  }
-
-  // Check and refresh credits if needed
-  const currentCredits = await addFreeMonthlyCreditsIfNeeded(session);
-
-  // If credits were refreshed, update the session
-  if (
-    session?.user?.currentCredits &&
-    currentCredits !== session.user.currentCredits
-  ) {
-    session.user.currentCredits = currentCredits;
   }
 
   // Update the user initials

@@ -177,11 +177,11 @@ export async function getMerchant(merchantId: string) {
  * Get all merchants for current user
  */
 export async function getMerchants() {
-  const session = await requireVerifiedEmail();
+  // const session = await requireVerifiedEmail();
 
-  if (!session) {
-    throw new ZSAError("NOT_AUTHORIZED", "Not authenticated");
-  }
+  // if (!session) {
+  //   throw new ZSAError("NOT_AUTHORIZED", "Not authenticated");
+  // }
 
   const db = getDB();
 

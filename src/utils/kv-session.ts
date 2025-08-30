@@ -3,7 +3,7 @@ import "server-only";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { headers } from "next/headers";
 
-import { getUserFromDB, getUserTeamsWithPermissions } from "@/utils/auth";
+import { getUserFromDB } from "@/utils/auth";
 import { getIP } from "./get-IP";
 import { MAX_SESSIONS_PER_USER } from "@/constants";
 const SESSION_PREFIX = "session:";
@@ -181,15 +181,11 @@ export async function updateKVSession(sessionId: string, userId: string, expires
     throw new Error("User not found");
   }
 
-  // Get updated teams data with permissions
-  const teamsWithPermissions = await getUserTeamsWithPermissions(userId);
-
   const updatedSession: KVSession = {
     ...session,
     version: CURRENT_SESSION_VERSION,
     expiresAt: expiresAt.getTime(),
     user: updatedUser,
-    teams: teamsWithPermissions
   };
 
   const kv = await getKV();
@@ -253,9 +249,6 @@ export async function updateAllSessionsOfUser(userId: string) {
 
   if (!newUserData) return;
 
-  // Get updated teams data with permissions
-  const teamsWithPermissions = await getUserTeamsWithPermissions(userId);
-
   for (const sessionObj of sessions) {
     const session = await kv.get(sessionObj.key);
     if (!session) continue;
@@ -271,7 +264,6 @@ export async function updateAllSessionsOfUser(userId: string) {
         JSON.stringify({
           ...sessionData,
           user: newUserData,
-          teams: teamsWithPermissions,
         }),
         { expirationTtl: ttlInSeconds }
       );

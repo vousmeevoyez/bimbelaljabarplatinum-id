@@ -18,10 +18,9 @@ import {
   Key
 } from "lucide-react"
 import type { InferSelectModel } from "drizzle-orm"
-import type { creditTransactionTable, passKeyCredentialTable } from "@/db/schema"
+import type { passKeyCredentialTable } from "@/db/schema"
 
 
-type CreditTransaction = InferSelectModel<typeof creditTransactionTable>
 type PasskeyCredential = InferSelectModel<typeof passKeyCredentialTable>
 
 interface UserDetailPageProps {
@@ -64,7 +63,7 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
     notFound()
   }
 
-  const { user, transactions, passkeys } = data
+  const { user, passkeys } = data
 
   const displayName = user?.firstName && user?.lastName
     ? `${user.firstName} ${user.lastName}`
@@ -256,47 +255,6 @@ export default async function UserDetailPage({ params }: UserDetailPageProps) {
             </CardContent>
           </Card>
         </div>
-
-        {/* Credit Transactions */}
-        {transactions.length > 0 && (
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Credit Transactions</CardTitle>
-              <CardDescription>
-                Last {transactions.length} credit transactions
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {transactions.map((transaction: CreditTransaction) => (
-                  <div key={transaction.id} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <Badge variant={transaction.type === 'PURCHASE' ? 'default' : 'secondary'}>
-                          {transaction.type}
-                        </Badge>
-                        {transaction.paymentIntentId && (
-                          <span className="text-xs text-muted-foreground font-mono">
-                            {transaction.paymentIntentId}
-                          </span>
-                        )}
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        {format(transaction.createdAt, "PPpp")}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold">
-                        {transaction.type === 'PURCHASE' ? '+' : ''}
-                        {transaction.amount} credits
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
       </div>
     </div>
   )

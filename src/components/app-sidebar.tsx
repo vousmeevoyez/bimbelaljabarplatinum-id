@@ -6,7 +6,7 @@ import type { Route } from 'next'
 import {
   Building2,
   SquareTerminal,
-  School2,
+  Store,
   ShoppingBag
 } from "lucide-react"
 
@@ -85,7 +85,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       {
         title: "Merchants",
         url: "/dashboard/merchants" as Route,
-        icon: School2,
+        icon: Store,
       },
       {
         title: "Products",
