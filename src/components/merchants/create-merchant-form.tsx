@@ -15,19 +15,13 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
 import { createMerchantAction } from "@/actions/merchant-actions";
-
-const twoMiB = 2 * 1024 * 1024;
+import { imageUploadSchema, ACCEPTED_IMAGE_TYPES, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
 
 const formSchema = z.object({
   name: z.string().min(1, "Merchant name is required").max(100, "Merchant name is too long"),
   description: z.string().max(1000, "Description is too long").optional(),
-  logoUrl: z
-    .instanceof(FileList)
-    .transform(l => (l && l.length ? l[0] : null)) // -> File | null
-    .refine(f => !f || f.type.startsWith("image/"), { message: "Only image files are allowed" })
-    .refine(f => !f || f.size <= twoMiB, { message: "File must be 2MB or smaller" })
-    .nullable()
-    .optional(),
+}).extend({
+  image: imageUploadSchema.shape.image.nullable().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -53,14 +47,14 @@ export function CreateMerchantForm() {
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", description: "", logoUrl: undefined },
+    defaultValues: { name: "", description: "", image: undefined },
   });
 
   function onSubmit(data: FormValues) {
     createMerchant({
       name: data.name,
       description: data.description?? undefined,
-      logo: data.logoUrl ?? undefined,
+      logo: data.image ?? undefined,
     });
   }
 
@@ -97,20 +91,20 @@ export function CreateMerchantForm() {
 
         <FormField
           control={form.control}
-          name="logoUrl"
+          name="image"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Logo</FormLabel>
               <FormControl>
                 <Input
                   type="file"
-                  accept="image/*"
+                  accept={ACCEPTED_IMAGE_TYPES.join(",")}
                   onChange={(e) => field.onChange(e.target.files)}
                   // RHF file inputs should not bind `value`; rely on ref for registration:
                   ref={field.ref}
                 />
               </FormControl>
-              <FormDescription>Optional logo for your merchant</FormDescription>
+              <FormDescription>{`Optional logo for your merchant.`}<br/> {imageUploadSpecDescription()}</FormDescription>
               <FormMessage />
             </FormItem>
           )}

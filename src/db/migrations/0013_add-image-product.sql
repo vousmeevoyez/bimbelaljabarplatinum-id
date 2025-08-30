@@ -1,0 +1,1 @@
+ALTER TABLE `product` ADD `imageUrl` text(600) NOT NULL;

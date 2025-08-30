@@ -9,24 +9,22 @@ import {
   AlertDialogDescription, AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 
-type ZsaAction<I, R, E = unknown> = (input: I) => Promise<[R | null, E | null]>;
-
-type DeleteInput = { merchantId: string };
 type DeleteResult = { success: boolean };
 
-export function DeleteConfirmation({
-  id, name, action
+export function DeleteConfirmation<T extends { merchantId: string } | { productId: string }>({
+  id, name, action, type = "merchant"
 }: {
   id: string;
   name: string;
-  action: ZsaAction<DeleteInput, DeleteResult>;
+  action: (input: T) => Promise<[DeleteResult | null, unknown | null]>;
+  type?: "merchant" | "product";
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const onConfirm = () =>
     startTransition(async () => {
-      const [res] = await action({ merchantId: id });
+      const [res] = await action((type === "merchant" ? { merchantId: id } : { productId: id }) as T);
       if (res?.success) router.refresh();
       // else handle toast/error if desired
     });

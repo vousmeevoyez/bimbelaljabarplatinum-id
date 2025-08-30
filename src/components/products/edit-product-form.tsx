@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import type { Product } from "@/db/schema";
 import {
   Form, FormControl, FormDescription, FormField,
   FormItem, FormLabel, FormMessage
@@ -15,7 +16,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
-import { createProductAction } from "@/actions/product-actions";
+import { updateProductAction } from "@/actions/product-actions";
 import { imageUploadSchema, ACCEPTED_IMAGE_TYPES, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
 
 const formSchema = z.object({
@@ -24,27 +25,31 @@ const formSchema = z.object({
   description: z.string().min(1, "Description is required").max(255, "Max 255 characters"),
   url: z.string().url("Must be a valid URL").max(255, "Max 255 characters"),
   priceCents: z.coerce.number().int("Must be an integer").nonnegative("Must be ≥ 0"),
-}).merge(
-  imageUploadSchema
-);
+}).merge(imageUploadSchema);
 
 type FormValues = z.infer<typeof formSchema>;
 type MerchantOption = { id: string; name: string };
 
-export function CreateProductForm({ merchants }: { merchants: MerchantOption[] }) {
+export function EditProductForm({
+  merchants,
+  product
+}: {
+  merchants: MerchantOption[];
+  product: Product;
+}) {
   const router = useRouter();
 
-  const { execute: createProduct } = useServerAction(createProductAction, {
+  const { execute: updateProduct } = useServerAction(updateProductAction, {
     onError: (error) => {
       toast.dismiss();
-      toast.error(error.err?.message || "Failed to create product");
+      toast.error(error.err?.message || "Failed to update product");
     },
     onStart: () => {
-      toast.loading("Creating product...");
+      toast.loading("Saving changes...");
     },
     onSuccess: () => {
       toast.dismiss();
-      toast.success("Product created successfully");
+      toast.success("Product updated");
       router.push(`/dashboard/products` as Route);
       router.refresh();
     }
@@ -53,23 +58,24 @@ export function CreateProductForm({ merchants }: { merchants: MerchantOption[] }
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      merchantId: "",
-      name: "",
-      description: "",
-      url: "",
-      priceCents: 0,
-      image: undefined,
+      merchantId: product.merchantId,
+      name: product.name,
+      description: product.description,
+      url: product.url,
+      priceCents: product.priceCents,
     },
   });
 
   function onSubmit(data: FormValues) {
-    createProduct({
+    updateProduct({
+      productId: product.id,
       merchantId: data.merchantId,
       name: data.name,
       description: data.description,
       url: data.url,
       priceCents: data.priceCents,
-      image: data.image ?? undefined, // pass through (nullable/optional) like the merchant example
+      // If no new file selected, send undefined so backend keeps the current image
+      image: data.image && (data.image as unknown as FileList)?.length ? data.image : undefined,
     });
   }
 
@@ -92,7 +98,7 @@ export function CreateProductForm({ merchants }: { merchants: MerchantOption[] }
                   </SelectContent>
                 </Select>
               </FormControl>
-              <FormDescription>Select the merchant that owns this product</FormDescription>
+              <FormDescription>Change the owning merchant if needed</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -105,7 +111,7 @@ export function CreateProductForm({ merchants }: { merchants: MerchantOption[] }
             <FormItem>
               <FormLabel>Product Name</FormLabel>
               <FormControl><Input placeholder="Enter product name" {...field} /></FormControl>
-              <FormDescription>A unique name for your product (≤255 chars)</FormDescription>
+              <FormDescription>≤255 characters</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -159,29 +165,44 @@ export function CreateProductForm({ merchants }: { merchants: MerchantOption[] }
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="image"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Product Image</FormLabel>
-              <FormControl>
-                <Input
-                  type="file"
-                  accept={ACCEPTED_IMAGE_TYPES.join(",")}
-                  onChange={(e) => field.onChange(e.target.files)}
-                  ref={field.ref}
-                />
-              </FormControl>
-              <FormDescription>{imageUploadSpecDescription()}</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="space-y-2">
+          {product.imageUrl ? (
+            <div className="flex items-center gap-4 rounded-lg border p-3">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={product.imageUrl} alt={product.name} className="h-16 w-16 rounded-md object-cover" />
+              <div className="text-sm text-muted-foreground">
+                Current image. Upload a new file to replace it.
+              </div>
+            </div>
+          ) : null}
+          <FormField
+            control={form.control}
+            name="image"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Replace Image</FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                    onChange={(e) => field.onChange(e.target.files)}
+                    ref={field.ref}
+                  />
+                </FormControl>
+                <FormDescription>{imageUploadSpecDescription()}</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
-        <Button type="submit" className="w-full">Create Product</Button>
+        <div className="flex gap-3">
+          <Button type="submit" className="flex-1">Save Changes</Button>
+          <Button type="button" variant="outline" className="flex-1" onClick={() => router.back()}>
+            Cancel
+          </Button>
+        </div>
       </form>
     </Form>
   );
 }
-

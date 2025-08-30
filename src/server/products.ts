@@ -7,6 +7,7 @@ import { ZSAError } from "zsa";
 import { createId } from "@paralleldrive/cuid2";
 import { eq, and, not } from "drizzle-orm";
 import { updateAllSessionsOfUser } from "@/utils/kv-session";
+import type { Product } from "@/db/schema";
 
 /**
  * Create a new product with the current user as owner
@@ -16,7 +17,10 @@ export async function createProduct(
 : {
   name: string;
   description: string;
-  logoUrl?: string;
+  merchantId: string;
+  url: string;
+  priceCents: number;
+  imageUrl?: string;
 }) {
   const { name } = params;
   // Verify user is authenticated
@@ -54,7 +58,12 @@ export async function createProduct(
 
   // Insert the product
   const newProduct = await db.insert(productTable).values({
-    ...params,
+    name: params.name,
+    description: params.description,
+    merchantId: params.merchantId,
+    url: params.url,
+    priceCents: params.priceCents,
+    imageUrl: params.imageUrl || "",
     slug
   }).returning();
 
@@ -70,7 +79,12 @@ export async function createProduct(
   await updateAllSessionsOfUser(userId);
 
   return {
-    ...params,
+    name: params.name,
+    description: params.description,
+    merchantId: params.merchantId,
+    url: params.url,
+    priceCents: params.priceCents,
+    imageUrl: params.imageUrl,
     productId,
     slug,
   };
@@ -81,11 +95,15 @@ export async function createProduct(
  */
 export async function updateProduct(parameter
 : {
+  merchantId: string;
   productId: string;
-    name?: string;
-    logoUrl?: string;
+  name?: string;
+  description?: string;
+  url?: string;
+  priceCents?: number;
+  imageUrl?: string;
 }) {
-  const {productId, name, logoUrl} = parameter;
+  const {productId, name, imageUrl} = parameter;
   const db = getDB();
 
   // If name is being updated, check if we need to update the slug
@@ -126,7 +144,7 @@ export async function updateProduct(parameter
       await db.update(productTable)
         .set({
           ...parameter,
-          logoUrl,
+          imageUrl,
           slug: newSlug,
         })
         .where(eq(productTable.id, productId));
@@ -176,17 +194,18 @@ export async function getProduct(productId: string) {
 /**
  * Get all products for current user
  */
-export async function getProducts() {
-  const session = await requireVerifiedEmail();
-
-  if (!session) {
-    throw new ZSAError("NOT_AUTHORIZED", "Not authenticated");
-  }
-
+export async function getProducts(merchantId?: string): Promise<Product[]> {
   const db = getDB();
 
   const products = await db.query.productTable.findMany({
+    columns: { id: true, name: true, priceCents: true, slug: true, imageUrl: true, url: true, description: true },
+    with: {
+      merchant: { columns: { id: true, name: true, slug: true } },
+    },
+    where: merchantId
+      ? (p, { eq }) => eq(p.merchantId, merchantId)
+      : undefined,
   });
 
-  return products
+  return products as Product[]
 }

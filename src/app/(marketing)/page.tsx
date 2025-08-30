@@ -1,86 +1,82 @@
-import { getSessionFromCookie } from "@/utils/auth";
-import { redirect, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
+import { Separator } from "@/components/ui/separator";
+import Image from "next/image";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import type { MerchantWithCount } from "@/db/schema";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users } from "lucide-react";
-import type { Route } from "next";
-import { getMerchantsAction, deleteMerchantAction } from "@/actions/merchant-actions";
-import { DeleteConfirmation } from "@/components/delete-confirmation";
+import { getMerchantsAction } from "@/actions/merchant-actions";
 import { getPresignedR2Url } from "@/lib/s3";
 
-// Types
-interface MerchantItem {
-  id: string;
-  name: string;
-  slug: string;
-  logoUrl: string | null;
-}
+export const metadata = { title: "My Merchants", description: "Manage your merchants" };
 
-
-// ---- Page ----
-export const metadata = {
-  title: "My Merchants",
-  description: "Manage your merchants",
-};
+const pluralize = (n: number, w: string) => `${n} ${w}${n === 1 ? "" : "s"}`;
 
 export default async function MerchantsIndexPage() {
-  // Load merchants
   const [result, error] = await getMerchantsAction();
-  let merchants: MerchantItem[] = [];
-  if (result?.success && result.data){
-    merchants = await Promise.all(result.data.map(async(data)=>{
-      let logoUrl = '';
-      if(data.logoUrl) {
-        logoUrl = await getPresignedR2Url(data.logoUrl)
-      };
-      return {...data, logoUrl}
-    }))
+  let merchants: MerchantWithCount[] = [];
+
+  if (result?.success && result.data) {
+    merchants = await Promise.all(
+      result.data.map(async (data) => {
+        let logoUrl = "";
+        if (data.logoUrl) logoUrl = await getPresignedR2Url(data.logoUrl);
+        return { ...data, logoUrl };
+      })
+    );
   }
   if (error) return notFound();
 
   return (
-    <>
-      <div className="container mx-auto px-5 pb-12">
-        <br/>
+    <main className="mx-auto max-w-5xl px-4 py-8 space-y-6">
+      <Separator />
+
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {merchants.length === 0 ? (
-          <Card className="border-dashed border-2">
+          <Card className="col-span-full">
             <CardHeader>
-              <CardTitle className="text-xl">You don&apos;t have any merchants yet</CardTitle>
+              <CardTitle>No merchants yet</CardTitle>
+              <CardDescription>Create your first merchant to get started.</CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-center py-8">
-              <Users className="h-16 w-16 text-muted-foreground/50" />
-            </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {merchants.map((merchant) => (
-              <Card key={merchant.id} className="h-full transition-all hover:border-primary hover:shadow-md">
-                <CardHeader className="flex items-start gap-4">
-                  {merchant.logoUrl ? (
-                    <div className="h-12 w-12 rounded-md overflow-hidden">
-                      <img src={merchant.logoUrl} alt={`${merchant.name} logo`} className="h-full w-full object-cover" />
-                    </div>
-                  ) : (
-                    <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
-                      <Users className="h-6 w-6" />
-                    </div>
-                  )}
-                  <div className="flex-1">
-                    <CardTitle className="line-clamp-1">
-                      <Link href={`/dashboard/merchants/${merchant.id}` as Route} className="hover:underline">
-                        {merchant.name}
-                      </Link>
-                    </CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent />
-              </Card>
-            ))}
-          </div>
+          merchants.map((merchant) => (
+            <Card key={merchant.id} className="h-full overflow-hidden hover:shadow-sm transition-shadow">
+              <div className="relative w-full aspect-[4/3]">
+                <Image
+                  src={merchant.logoUrl || "/placeholder.svg"}
+                  alt={`${merchant.name} logo`}
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover"
+                  priority={false}
+                />
+                <div className="absolute top-3 right-3">
+                  <Badge variant="secondary" className="backdrop-blur">
+                    {pluralize(merchant.productCount ?? 0, "product")}
+                  </Badge>
+                </div>
+              </div>
+
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl leading-tight line-clamp-1">{merchant.name}</CardTitle>
+                {merchant.description ? (
+                  <CardDescription className="line-clamp-2">{merchant.description}</CardDescription>
+                ) : null}
+              </CardHeader>
+
+              <CardContent className="pt-0 flex-1" />
+
+              <CardFooter className="pt-0">
+                <Button asChild className="w-full">
+                    <Link href={`/${merchant.id}`}>View products</Link>
+                </Button>
+              </CardFooter>
+            </Card>
+          ))
         )}
-      </div>
-    </>
+      </section>
+    </main>
   );
 }
-

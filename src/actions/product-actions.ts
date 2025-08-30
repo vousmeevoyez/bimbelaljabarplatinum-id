@@ -8,9 +8,12 @@ import { uploadToR2 } from "@/lib/s3";
 // Update product schema
 const updateProductSchema = z.object({
   productId: z.string().min(1, "Product ID is required"),
+  merchantId: z.string().min(1, "Merchant ID is required"),
   name: z.string().min(1, "Name is required").max(100, "Name is too long").optional(),
-  description: z.string().max(1000, "Description is too long").optional(),
-  logo: z.instanceof(File)
+  description: z.string().min(1, "Description is required").max(1000, "Description is too long").optional(),
+  url: z.string().url("Must be a valid URL").optional(),
+  priceCents: z.number().int("Must be an integer").nonnegative("Must be ≥ 0").optional(),
+  image: z.instanceof(File)
     .refine(file => file.type.startsWith("image/"), {
       message: "Only image files are allowed",
     })
@@ -30,8 +33,11 @@ const getProductSchema = z.object({
 
 const createProductSchema = z.object({
   name: z.string().min(1, "Name is required").max(100, "Name is too long"),
-  description: z.string().max(1000, "Description is too long").optional(),
-  logo: z.instanceof(File)
+  description: z.string().min(1, "Description is required").max(1000, "Description is too long"),
+  merchantId: z.string().min(1, "Merchant ID is required"),
+  url: z.string().url("Must be a valid URL"),
+  priceCents: z.number().int("Must be an integer").nonnegative("Must be ≥ 0"),
+  image: z.instanceof(File)
     .refine(file => file.type.startsWith("image/"), {
       message: "Only image files are allowed",
     })
@@ -41,13 +47,17 @@ const createProductSchema = z.object({
     .optional(),
 });
 
+const getProductsSchema = z.object({
+  merchantId: z.string().min(1).optional(),
+});
+
 export const createProductAction = createServerAction()
   .input(createProductSchema)
   .handler(async ({ input }) => {
     try {
-      let logoUrl;
-      if(input.logo) logoUrl = await uploadToR2(input.logo)
-      const result = await createProduct({...input, logoUrl});
+      let imageUrl;
+      if(input.image) imageUrl = await uploadToR2(input.image)
+      const result = await createProduct({...input, imageUrl});
       return { success: true, data: result };
     } catch (error) {
       console.error("Failed to create product:", error);
@@ -70,9 +80,17 @@ export const updateProductAction = createServerAction()
   .input(updateProductSchema)
   .handler(async ({ input }) => {
     try {
-      let logoUrl;
-      if(input.logo) logoUrl = await uploadToR2(input.logo)
-      const result = await updateProduct({...input, logoUrl: logoUrl});
+      let imageUrl;
+      if(input.image) imageUrl = await uploadToR2(input.image)
+      const result = await updateProduct({
+        merchantId: input.merchantId,
+        productId: input.productId,
+        name: input.name,
+        description: input.description,
+        url: input.url,
+        priceCents: input.priceCents,
+        imageUrl: imageUrl
+      });
       return { success: true, data: result };
     } catch (error) {
       console.error("Failed to update product:", error);
@@ -115,9 +133,10 @@ export const deleteProductAction = createServerAction()
  * Get all products for the current user
  */
 export const getProductsAction = createServerAction()
-  .handler(async () => {
+  .input(getProductsSchema)
+  .handler(async ({input}) => {
     try {
-      const products = await getProducts();
+      const products = await getProducts(input?.merchantId);
       return { success: true, data: products };
     } catch (error) {
       console.error("Failed to get user products:", error);

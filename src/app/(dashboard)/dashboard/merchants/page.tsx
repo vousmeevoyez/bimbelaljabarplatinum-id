@@ -1,4 +1,5 @@
 import { getSessionFromCookie } from "@/utils/auth";
+import Image from "next/image";
 import { redirect, notFound } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -84,9 +85,16 @@ export default async function MerchantsIndexPage() {
               <Card key={merchant.id} className="h-full transition-all hover:border-primary hover:shadow-md">
                 <CardHeader className="flex items-start gap-4">
                   {merchant.logoUrl ? (
-                    <div className="h-12 w-12 rounded-md overflow-hidden">
-                      <img src={merchant.logoUrl} alt={`${merchant.name} logo`} className="h-full w-full object-cover" />
-                    </div>
+                      <div className="relative h-12 w-12 rounded-md overflow-hidden">
+  <Image
+    src={merchant.logoUrl}
+    alt={`${merchant.name} logo`}
+    fill
+    className="object-cover"
+    sizes="48px"
+    unoptimized
+  />
+</div>
                   ) : (
                     <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
                       <Users className="h-6 w-6" />
@@ -94,11 +102,18 @@ export default async function MerchantsIndexPage() {
                   )}
                   <div className="flex-1">
                     <CardTitle className="line-clamp-1">
-                      <Link href={`/dashboard/merchants/${merchant.id}` as Route} className="hover:underline">
                         {merchant.name}
-                      </Link>
                     </CardTitle>
-                    <CardDescription className="text-xs">Slug: {merchant.slug}</CardDescription>
+                      <br/>
+                    <CardDescription className="text-xs">
+                      <Link
+                            href={`/dashboard/products?merchantId=${merchant.id}` as Route}
+
+                          className="hover:underline">
+                          View merchant products
+                      </Link>
+
+                      </CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent />
@@ -106,7 +121,7 @@ export default async function MerchantsIndexPage() {
                   <Button asChild variant="outline" size="sm">
                     <Link href={`/dashboard/merchants/${merchant.id}/edit` as Route}>Edit</Link>
                   </Button>
-                    <DeleteConfirmation id={merchant.id} name={merchant.name} action={deleteMerchantAction} />
+                                          <DeleteConfirmation id={merchant.id} name={merchant.name} action={deleteMerchantAction} type="merchant" />
                 </CardFooter>
               </Card>
             ))}

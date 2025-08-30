@@ -137,6 +137,7 @@ export const productTable = sqliteTable(
     url: text({ length: 255 }).notNull(),
     slug: text({ length: 150 }).notNull(), // per-merchant slug
     priceCents: integer().notNull(),
+    imageUrl: text({ length: 600 }).notNull(),
   },
   (table) => ({
     merchantIdx: index("product_merchant_idx").on(table.merchantId),
@@ -159,7 +160,13 @@ export const productRelations = relations(productTable, ({ one }) => ({
 
 // --- (optional) handy types ---
 export type Merchant = InferSelectModel<typeof merchantTable>;
-export type Product = InferSelectModel<typeof productTable>;
+export type MerchantWithCount = Merchant & { productCount: number };
+export type Product = InferSelectModel<typeof productTable> & {  merchant: {
+    id: string;
+    name: string;
+    slug: string;
+  };
+};
 
 export type User = InferSelectModel<typeof userTable>;
 export type PassKeyCredential = InferSelectModel<typeof passKeyCredentialTable>;

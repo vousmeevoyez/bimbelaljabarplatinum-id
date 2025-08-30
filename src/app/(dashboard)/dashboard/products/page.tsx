@@ -1,42 +1,49 @@
 import { getSessionFromCookie } from "@/utils/auth";
 import { redirect, notFound } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/page-header";
+import type { Product } from "@/db/schema";
 import { getProductsAction, deleteProductAction } from "@/actions/product-actions";
 import { DeleteConfirmation } from "@/components/delete-confirmation";
 import { getPresignedR2Url } from "@/lib/s3";
 import { ShoppingBag, PlusIcon } from "lucide-react";
 import type { Route } from "next";
 
-interface ProductItem {
-  id: string;
-  name: string;
-  slug: string;
-  logoUrl: string | null;
-}
-
 export const metadata = {
   title: "My Products",
   description: "Manage your products",
 };
 
-export default async function ProductsIndexPage() {
+export default async function ProductsIndexPage({
+  searchParams,
+}: {
+  searchParams?: { merchantId?: string };
+}) {
   const session = await getSessionFromCookie();
-  if (!session) redirect("/sign-in?redirect=/dashboard/products");
 
-  const [result, error] = await getProductsAction();
-  let products: ProductItem[] = [];
+  const merchantId = searchParams?.merchantId;
+  const qs = merchantId ? `?merchantId=${encodeURIComponent(merchantId)}` : "";
+
+  if (!session) redirect((`/sign-in?redirect=/dashboard/products${qs}`) as Route);
+
+  // 👉 Pass merchantId to your server action
+  const [result, error] = await getProductsAction({ merchantId });
+
+  let products: Product[] = [];
   if (result?.success && result.data) {
     products = await Promise.all(
       result.data.map(async (data) => {
-        let logoUrl = "";
-        if (data.logoUrl) logoUrl = await getPresignedR2Url(data.logoUrl);
-        return { ...data, logoUrl };
+        let imageUrl = "";
+        if (data.imageUrl) imageUrl = await getPresignedR2Url(data.imageUrl);
+        return { ...data, imageUrl };
       })
     );
   }
   if (error) return notFound();
+
+  const createHref = (`/dashboard/products/create${qs}`) as Route;
 
   return (
     <>
@@ -48,7 +55,7 @@ export default async function ProductsIndexPage() {
             <p className="text-muted-foreground mt-2">Manage your products</p>
           </div>
           <Button asChild>
-            <Link href={"/dashboard/products/create" as Route}>
+            <Link href={createHref}>
               <PlusIcon className="h-4 w-4 mr-2" />
               Create Product
             </Link>
@@ -60,7 +67,7 @@ export default async function ProductsIndexPage() {
             <ShoppingBag className="h-16 w-16 mx-auto text-muted-foreground/50" />
             <h2 className="mt-4 text-xl">You don&apos;t have any products yet</h2>
             <Button asChild className="mt-6">
-              <Link href={"/dashboard/products/create" as Route}>
+              <Link href={createHref}>
                 <PlusIcon className="h-4 w-4 mr-2" />
                 Create your first product
               </Link>
@@ -71,9 +78,11 @@ export default async function ProductsIndexPage() {
             <table className="w-full text-left">
               <thead className="bg-muted">
                 <tr>
-                  <th className="p-3">Logo</th>
+                  <th className="p-3">Image</th>
                   <th className="p-3">Name</th>
-                  <th className="p-3">Slug</th>
+                  <th className="p-3">Merchant</th>
+                  <th className="p-3">Price</th>
+                  <th className="p-3">Url</th>
                   <th className="p-3 text-right">Actions</th>
                 </tr>
               </thead>
@@ -81,8 +90,15 @@ export default async function ProductsIndexPage() {
                 {products.map((product) => (
                   <tr key={product.id} className="border-t">
                     <td className="p-3">
-                      {product.logoUrl ? (
-                        <img src={product.logoUrl} alt="" className="h-10 w-10 rounded object-cover" />
+                      {product.imageUrl ? (
+<Image
+  src={product.imageUrl}
+  alt={product.name || "Product image"}
+  width={40}
+  height={40}
+  className="h-10 w-10 rounded object-cover"
+  unoptimized
+/>
                       ) : (
                         <div className="flex h-10 w-10 items-center justify-center rounded bg-muted">
                           <ShoppingBag className="h-5 w-5" />
@@ -94,12 +110,16 @@ export default async function ProductsIndexPage() {
                         {product.name}
                       </Link>
                     </td>
-                    <td className="p-3">{product.slug}</td>
+                    <td className="p-3">{product.merchant.name}</td>
+                    <td className="p-3">
+                      {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(product.priceCents)}
+                    </td>
+                    <td className="p-3">{product.url}</td>
                     <td className="p-3 text-right flex justify-end gap-2">
                       <Button asChild variant="outline" size="sm">
                         <Link href={`/dashboard/products/${product.id}/edit` as Route}>Edit</Link>
                       </Button>
-                      <DeleteConfirmation id={product.id} name={product.name} action={deleteProductAction} />
+                      <DeleteConfirmation id={product.id} name={product.name} action={deleteProductAction} type="product" />
                     </td>
                   </tr>
                 ))}
@@ -111,3 +131,4 @@ export default async function ProductsIndexPage() {
     </>
   );
 }
+

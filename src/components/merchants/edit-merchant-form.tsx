@@ -16,19 +16,13 @@ import {
 import { useRouter } from "next/navigation";
 import { useServerAction } from "zsa-react";
 import { updateMerchantAction } from "@/actions/merchant-actions";
-
-const twoMiB = 2 * 1024 * 1024;
+import { imageUploadSchema, ACCEPTED_IMAGE_TYPES, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
 
 const baseSchema = z.object({
   name: z.string().min(1, "Merchant name is required").max(100, "Merchant name is too long"),
   description: z.string().max(1000, "Description is too long").optional(),
-  logo: z
-    .instanceof(FileList)
-    .transform(l => (l && l.length ? l[0] : null))
-    .refine(f => !f || f.type.startsWith("image/"), { message: "Only image files are allowed" })
-    .refine(f => !f || f.size <= twoMiB, { message: "File must be 2MB or smaller" })
-    .nullable()
-    .optional(),
+}).extend({
+  image: imageUploadSchema.shape.image.nullable().optional(),
 });
 
 const editSchema = baseSchema.extend({ removeLogo: z.boolean().default(false).optional() });
@@ -67,7 +61,7 @@ export function EditMerchantForm({ merchant }: { merchant: Merchant }) {
     defaultValues: {
       name: merchant.name,
       description: merchant.description,
-      logo: undefined,
+      image: undefined,
     },
   });
 
@@ -76,7 +70,7 @@ export function EditMerchantForm({ merchant }: { merchant: Merchant }) {
       merchantId: merchant.id,
       name: data.name,
       description: data.description || undefined,
-      logo: data.logo ?? undefined,
+      logo: data.image ?? undefined,
     })
   }
 
@@ -128,22 +122,26 @@ export function EditMerchantForm({ merchant }: { merchant: Merchant }) {
               </div>
           <FormField
             control={form.control}
-            name="logo"
+            name="image"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Logo</FormLabel>
                 <FormControl>
                   <Input
                     type="file"
-                    accept="image/*"
+                    accept={ACCEPTED_IMAGE_TYPES.join(",")}
                     onChange={e => field.onChange(e.target.files)}
                     ref={field.ref}
                     key={form.formState.submitCount}
                   />
                 </FormControl>
-                <FormDescription>
-                  {hasExistingLogo ? "Choose a new image to replace the current logo" : "Optional logo for your merchant"}
-                </FormDescription>
+                    <FormDescription>
+  {hasExistingLogo
+    ? "Choose a new image to replace the current logo"
+    : "Optional logo for your merchant."}
+  <br/>
+  {imageUploadSpecDescription()}
+</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -164,7 +162,7 @@ export function EditMerchantForm({ merchant }: { merchant: Merchant }) {
               form.reset({
                 name: merchant.name,
                 description: undefined,
-                logo: undefined,
+                image: undefined,
                 removeLogo: false,
               })
             }

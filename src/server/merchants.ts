@@ -1,11 +1,11 @@
 import "server-only";
 import { getDB } from "@/db";
-import { merchantTable} from "@/db/schema";
+import { merchantTable, productTable, type MerchantWithCount } from "@/db/schema";
 import { requireVerifiedEmail } from "@/utils/auth";
 import { generateSlug } from "@/utils/slugify";
 import { ZSAError } from "zsa";
 import { createId } from "@paralleldrive/cuid2";
-import { eq, and, not } from "drizzle-orm";
+import { sql, eq, and, not, getTableColumns } from "drizzle-orm";
 import { updateAllSessionsOfUser } from "@/utils/kv-session";
 
 /**
@@ -15,7 +15,7 @@ export async function createMerchant(
   params
 : {
   name: string;
-  description: string;
+  description?: string;
   logoUrl?: string;
 }) {
   const { name } = params;
@@ -176,17 +176,18 @@ export async function getMerchant(merchantId: string) {
 /**
  * Get all merchants for current user
  */
-export async function getMerchants() {
-  // const session = await requireVerifiedEmail();
-
-  // if (!session) {
-  //   throw new ZSAError("NOT_AUTHORIZED", "Not authenticated");
-  // }
-
+export async function getMerchants(): Promise<MerchantWithCount[]> {
   const db = getDB();
+  const m = getTableColumns(merchantTable);
 
-  const merchants = await db.query.merchantTable.findMany({
-  });
+  const rows = await db
+    .select({
+      ...m,
+      productCount: sql<number>`coalesce(count(${productTable.id}), 0)`,
+    })
+    .from(merchantTable)
+    .leftJoin(productTable, eq(productTable.merchantId, merchantTable.id))
+    .groupBy(...Object.values(m));
 
-  return merchants
+  return rows as MerchantWithCount[];
 }

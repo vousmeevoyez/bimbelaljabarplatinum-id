@@ -32,6 +32,7 @@ export default async function EditMerchantPage({params}: EditMerchantPageProps) 
 
   const merchant: Merchant = {
     ...result.data,
+    description: result.data.description || undefined,
     logoUrl: result.data.logoUrl
       ? await getPresignedR2Url(result.data.logoUrl)
       : undefined
