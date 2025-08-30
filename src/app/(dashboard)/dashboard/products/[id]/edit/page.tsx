@@ -34,7 +34,8 @@ export default async function EditProductPage({params}: EditProductPageProps) {
 
   const product: Product = {
     ...result.data,
-    imageUrl: await getPresignedR2Url(result.data.imageUrl)
+    imageUrl: await getPresignedR2Url(result.data.imageUrl),
+    merchant: result.data.merchant
   };
 
   const [merchantResult, merchantError] = await getMerchantsAction();

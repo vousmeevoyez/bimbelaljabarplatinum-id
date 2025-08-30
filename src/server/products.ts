@@ -182,6 +182,9 @@ export async function getProduct(productId: string) {
 
   const product = await db.query.productTable.findFirst({
     where: eq(productTable.id, productId),
+    with: {
+      merchant: { columns: { id: true, name: true, slug: true } },
+    },
   });
 
   if (!product) {

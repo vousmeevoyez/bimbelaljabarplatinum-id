@@ -19,11 +19,12 @@ export const metadata = {
 export default async function ProductsIndexPage({
   searchParams,
 }: {
-  searchParams?: { merchantId?: string };
+  searchParams?: Promise<{ merchantId?: string }>;
 }) {
   const session = await getSessionFromCookie();
 
-  const merchantId = searchParams?.merchantId;
+  const resolvedSearchParams = await searchParams;
+  const merchantId = resolvedSearchParams?.merchantId;
   const qs = merchantId ? `?merchantId=${encodeURIComponent(merchantId)}` : "";
 
   if (!session) redirect((`/sign-in?redirect=/dashboard/products${qs}`) as Route);

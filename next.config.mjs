@@ -26,6 +26,7 @@ const nextConfig = {
         // Narrow if you like; query params are ignored by this matcher.
         pathname: '/my-bucket-name/uploads/**',
       },
+      { protocol: 'https', hostname: 'images.bimbelaljabarplatinum.id', pathname: '/**' },
     ],
   },
 };
