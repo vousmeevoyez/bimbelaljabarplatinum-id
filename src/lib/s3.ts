@@ -21,6 +21,6 @@ export async function uploadToR2(file: File, prefix?: string) {
 
 /** For now, just return a plain URL */
 export async function getPresignedR2Url(key: string) {
-  return `${process.env.NEXT_PUBLIC_R2_BASE}/${key}`;
+  return `${process.env.R2_BASE}/${key}`;
 }
 
