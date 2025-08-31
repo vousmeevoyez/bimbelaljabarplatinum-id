@@ -18,24 +18,6 @@ type NavItem = {
   href: Route;
 }
 
-const ActionButtons = () => {
-  const { session, isLoading } = useSessionStore()
-  const { setIsOpen } = useNavStore()
-
-  if (isLoading) {
-    return <Skeleton className="h-10 w-[80px] bg-primary" />
-  }
-
-  if (session) {
-    return null;
-  }
-
-  return (
-    <Button asChild onClick={() => setIsOpen(false)}>
-      <Link href="/sign-in">Sign In</Link>
-    </Button>
-  )
-}
 
 export function Navigation() {
   const { session, isLoading } = useSessionStore()
@@ -90,7 +72,6 @@ export function Navigation() {
                 ))
               )}
             </div>
-            <ActionButtons />
           </div>
           <div className="md:hidden flex items-center">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -124,9 +105,6 @@ export function Navigation() {
                             {item.name}
                           </Link>
                         ))}
-                        <div className="px-3 pt-4">
-                          <ActionButtons />
-                        </div>
                       </>
                     )}
                   </div>

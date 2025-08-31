@@ -36,7 +36,7 @@ export default async function MerchantsIndexPage() {
   let merchants: MerchantItem[] = [];
   if (result?.success && result.data){
     merchants = await Promise.all(result.data.map(async(data)=>{
-      let logoUrl = '';
+      let logoUrl = null;
       if(data.logoUrl) {
         logoUrl = await getPresignedR2Url(data.logoUrl)
       };
@@ -92,7 +92,6 @@ export default async function MerchantsIndexPage() {
     fill
     className="object-cover"
     sizes="48px"
-    unoptimized
   />
 </div>
                   ) : (

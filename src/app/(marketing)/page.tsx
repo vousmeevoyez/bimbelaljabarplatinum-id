@@ -20,7 +20,7 @@ export default async function MerchantsIndexPage() {
   if (result?.success && result.data) {
     merchants = await Promise.all(
       result.data.map(async (data) => {
-        let logoUrl = "";
+        let logoUrl = null;
         if (data.logoUrl) logoUrl = await getPresignedR2Url(data.logoUrl);
         return { ...data, logoUrl };
       })
@@ -44,14 +44,15 @@ export default async function MerchantsIndexPage() {
           merchants.map((merchant) => (
             <Card key={merchant.id} className="h-full overflow-hidden hover:shadow-sm transition-shadow">
               <div className="relative w-full aspect-[4/3]">
-                <Image
-                  src={merchant.logoUrl || "/placeholder.svg"}
+                {merchant.logoUrl && <Image
+                  src={merchant.logoUrl}
                   alt={`${merchant.name} logo`}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                   className="object-cover"
                   priority={false}
-                />
+    unoptimized
+                />}
                 <div className="absolute top-3 right-3">
                   <Badge variant="secondary" className="backdrop-blur">
                     {pluralize(merchant.productCount ?? 0, "product")}
