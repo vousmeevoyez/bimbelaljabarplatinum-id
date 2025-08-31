@@ -1,56 +1,22 @@
-/**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
- */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "bimbelaljabarplatinum-id",
   "main": ".open-next/worker.js",
   "compatibility_date": "2025-03-01",
-  "compatibility_flags": [
-    "nodejs_compat",
-    "global_fetch_strictly_public"
-  ],
-  // Minification helps to keep the Worker bundle size down and improve start up time.
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "minify": true,
   "assets": {
     "binding": "ASSETS",
     "directory": ".open-next/assets"
   },
-  "observability": {
-    "enabled": true
-  },
-  /**
-     * Smart Placement
-     * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-     */
-  "placement": {
-    "mode": "smart"
-  },
-  /**
-     * Bindings
-     * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
-     * databases, object storage, AI inference, real-time communication and more.
-     * https://developers.cloudflare.com/workers/runtime-apis/bindings/
-     */
-  /**
-     * Environment Variables
-     * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-     */
+  "observability": { "enabled": true },
+  "placement": { "mode": "smart" },
   "vars": {
     "EMAIL_FROM": "no-reply@bimbelaljabarplatinum.id",
     "EMAIL_FROM_NAME": "bimbelaljabarplatinum.id",
     "EMAIL_REPLY_TO": "support@bimbelaljabarplatinum.id",
     "NEXT_PUBLIC_R2_BASE": "https://images.bimbelaljabarplatinum.id"
   },
-  /**
-     * Note: Use secrets to store sensitive data.
-     * https://developers.cloudflare.com/workers/configuration/secrets/
-     */
-  /**
-     * Service Bindings (communicate between multiple Workers)
-     * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
-     */
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
@@ -68,9 +34,7 @@
   "migrations": [
     {
       "tag": "v1",
-      "new_sqlite_classes": [
-        "DOQueueHandler"
-      ]
+      "new_sqlite_classes": ["DOQueueHandler"]
     }
   ],
   "d1_databases": [
