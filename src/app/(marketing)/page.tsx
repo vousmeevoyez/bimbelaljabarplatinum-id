@@ -68,11 +68,11 @@ export default async function MerchantsIndexPage() {
 
               <CardContent className="pt-0 flex-1" />
 
-              <CardFooter className="pt-0">
+              {merchant.productCount !== 0 &&<CardFooter className="pt-0">
                 <Button asChild className="w-full">
                     <Link href={`/${merchant.id}`}>View products</Link>
                 </Button>
-              </CardFooter>
+              </CardFooter>}
             </Card>
           ))
         )}
