@@ -40,7 +40,8 @@
   "vars": {
     "EMAIL_FROM": "no-reply@bimbelaljabarplatinum.id",
     "EMAIL_FROM_NAME": "bimbelaljabarplatinum.id",
-    "EMAIL_REPLY_TO": "support@bimbelaljabarplatinum.id"
+    "EMAIL_REPLY_TO": "support@bimbelaljabarplatinum.id",
+    "NEXT_PUBLIC_R2_BASE": "https://images.bimbelaljabarplatinum.id"
   },
   /**
      * Note: Use secrets to store sensitive data.
@@ -99,7 +100,7 @@
   "r2_buckets": [
     {
       "bucket_name": "prod-bimbelaljabarplatinum-id",
-      "binding": "prod_bimbelaljabarplatinum_id"
+      "binding": "NEXT_R2_BUCKET"
     }
   ]
 }
