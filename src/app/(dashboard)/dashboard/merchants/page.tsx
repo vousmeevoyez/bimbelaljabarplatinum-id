@@ -16,7 +16,7 @@ interface MerchantItem {
   id: string;
   name: string;
   slug: string;
-  logoUrl: string | null;
+  logoUrl: string | null | undefined;
 }
 
 
@@ -36,9 +36,9 @@ export default async function MerchantsIndexPage() {
   let merchants: MerchantItem[] = [];
   if (result?.success && result.data){
     merchants = await Promise.all(result.data.map(async(data)=>{
-      let logoUrl = null;
+      let logoUrl: string | null = null;
       if(data.logoUrl) {
-        logoUrl = await getPresignedR2Url(data.logoUrl)
+        logoUrl = await getPresignedR2Url(data.logoUrl) || null
       };
       return {...data, logoUrl}
     }))

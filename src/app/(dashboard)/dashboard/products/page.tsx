@@ -37,7 +37,7 @@ export default async function ProductsIndexPage({
     products = await Promise.all(
       result.data.map(async (data) => {
         let imageUrl = "";
-        if (data.imageUrl) imageUrl = await getPresignedR2Url(data.imageUrl);
+        if (data.imageUrl) imageUrl = (await getPresignedR2Url(data.imageUrl)) || "";
         return { ...data, imageUrl };
       })
     );

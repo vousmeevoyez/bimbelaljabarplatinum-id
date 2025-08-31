@@ -9,8 +9,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { getMerchantsAction } from "@/actions/merchant-actions";
 import { getPresignedR2Url } from "@/lib/s3";
 
-export const metadata = { title: "My Merchants", description: "Manage your merchants" };
-
 const pluralize = (n: number, w: string) => `${n} ${w}${n === 1 ? "" : "s"}`;
 
 export default async function MerchantsIndexPage() {
@@ -20,8 +18,8 @@ export default async function MerchantsIndexPage() {
   if (result?.success && result.data) {
     merchants = await Promise.all(
       result.data.map(async (data) => {
-        let logoUrl = null;
-        if (data.logoUrl) logoUrl = await getPresignedR2Url(data.logoUrl);
+        let logoUrl: string | null = null;
+        if (data.logoUrl) logoUrl = (await getPresignedR2Url(data.logoUrl)) || null;
         return { ...data, logoUrl };
       })
     );

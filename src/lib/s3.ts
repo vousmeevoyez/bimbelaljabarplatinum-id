@@ -22,6 +22,6 @@ export async function uploadToR2(file: File, prefix?: string) {
 /** For now, just return a plain URL */
 export async function getPresignedR2Url(key: string) {
   const base = process.env.R2_BASE;
-  if (!base || !/^https?:\/\//.test(base)) return null;
+  if (!base || !/^https?:\/\//.test(base)) return undefined;
   return `${base.replace(/\/+$/, "")}/${key}`;
 }

@@ -23,7 +23,7 @@ export default async function MerchantProductsPage({ params }: PageProps) {
   if (result?.success && result.data) {
     products = await Promise.all(
       result.data.map(async (data) => {
-        const imageUrl = await getPresignedR2Url(data.imageUrl);
+        const imageUrl = data.imageUrl ? (await getPresignedR2Url(data.imageUrl)) || "" : "";
         return { ...data, imageUrl };
       })
     );
