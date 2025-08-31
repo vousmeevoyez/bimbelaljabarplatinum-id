@@ -36,8 +36,6 @@ export default async function MerchantProductsPage({ params }: PageProps) {
     <main className="mx-auto max-w-5xl px-4 py-8 space-y-6">
       <Separator />
 
-      <h2 className="text-xl font-medium">{product.merchant.name}</h2>
-
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.length === 0 ? (
           <Card className="col-span-full">
