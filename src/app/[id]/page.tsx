@@ -8,15 +8,19 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { getPresignedR2Url } from "@/lib/s3";
 import { getProductsAction } from "@/actions/product-actions";
 import Link from "next/link";
-import type { Route } from "next"; // ⬅️ add this
+import type { Route } from "next";
 import { getSessionFromCookie } from "@/utils/auth";
 
 export const metadata = { title: "My Merchants", description: "Manage your merchants" };
 
-interface PageProps { params: { id: string } } // ⬅️ fix: not a Promise
+interface MerchantProductsPageProps {
+  params: Promise<{ id: string }>
+}
 
-export default async function MerchantProductsPage({ params }: PageProps) {
-  const { id } = params; // ⬅️ remove await
+export default async function MerchantProductsPage(
+  { params }: MerchantProductsPageProps
+) {
+  const { id } = await params
 
   const session = await getSessionFromCookie();
   const isAuthed = !!session?.user;
@@ -32,6 +36,7 @@ export default async function MerchantProductsPage({ params }: PageProps) {
       })
     );
   }
+
   if (error) return notFound();
 
   const visibleProducts = isAuthed ? products : products.filter(p => (p.priceCents ?? 0) === 0);
@@ -40,7 +45,6 @@ export default async function MerchantProductsPage({ params }: PageProps) {
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 space-y-6">
       <Separator />
-
       {!isAuthed && products.some(p => (p.priceCents ?? 0) > 0) && (
         <Card>
           <CardHeader>
@@ -56,7 +60,6 @@ export default async function MerchantProductsPage({ params }: PageProps) {
           </CardFooter>
         </Card>
       )}
-
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {visibleProducts.length === 0 ? (
           <Card className="col-span-full">
@@ -72,8 +75,7 @@ export default async function MerchantProductsPage({ params }: PageProps) {
             const requiresAuth = (product.priceCents ?? 0) > 0;
             const buyHref = !isAuthed && requiresAuth
               ? `/sign-in?redirect=${encodeURIComponent(redirect)}`
-              : (product.url || "/"); // fallback just in case
-
+              : (product.url || "/");
             const buyRel = !isAuthed && requiresAuth ? undefined : "noopener noreferrer";
             const buyTarget = !isAuthed && requiresAuth ? undefined : "_blank";
 
@@ -86,10 +88,8 @@ export default async function MerchantProductsPage({ params }: PageProps) {
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover"
-                    priority={false}
                   />
                 </div>
-
                 <CardHeader className="pb-2 flex items-center justify-between">
                   <div>
                     <CardTitle className="text-xl leading-tight line-clamp-1">{product.name}</CardTitle>
@@ -101,9 +101,7 @@ export default async function MerchantProductsPage({ params }: PageProps) {
                       : new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(product.priceCents)}
                   </Badge>
                 </CardHeader>
-
                 <CardContent className="pt-0 flex-1" />
-
                 <CardFooter className="pt-0">
                   <Button asChild className="w-full">
                     <a href={buyHref} target={buyTarget} rel={buyRel}>
