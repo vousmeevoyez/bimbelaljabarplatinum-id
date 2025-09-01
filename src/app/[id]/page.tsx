@@ -8,14 +8,15 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { getPresignedR2Url } from "@/lib/s3";
 import { getProductsAction } from "@/actions/product-actions";
 import Link from "next/link";
+import type { Route } from "next"; // ⬅️ add this
 import { getSessionFromCookie } from "@/utils/auth";
 
 export const metadata = { title: "My Merchants", description: "Manage your merchants" };
 
-interface PageProps { params: Promise<{ id: string }> }
+interface PageProps { params: { id: string } } // ⬅️ fix: not a Promise
 
 export default async function MerchantProductsPage({ params }: PageProps) {
-  const { id } = await params;
+  const { id } = params; // ⬅️ remove await
 
   const session = await getSessionFromCookie();
   const isAuthed = !!session?.user;
@@ -33,9 +34,7 @@ export default async function MerchantProductsPage({ params }: PageProps) {
   }
   if (error) return notFound();
 
-  // Hide paid products from unauthenticated users
   const visibleProducts = isAuthed ? products : products.filter(p => (p.priceCents ?? 0) === 0);
-
   const redirect = `/${id}`;
 
   return (
@@ -50,7 +49,9 @@ export default async function MerchantProductsPage({ params }: PageProps) {
           </CardHeader>
           <CardFooter>
             <Button asChild>
-              <Link href={`/sign-in?redirect=${encodeURIComponent(redirect)}`}>Sign in / Sign up</Link>
+              <Link href={`/sign-in?redirect=${encodeURIComponent(redirect)}` as Route}>
+                Sign in / Sign up
+              </Link>
             </Button>
           </CardFooter>
         </Card>
@@ -71,7 +72,7 @@ export default async function MerchantProductsPage({ params }: PageProps) {
             const requiresAuth = (product.priceCents ?? 0) > 0;
             const buyHref = !isAuthed && requiresAuth
               ? `/sign-in?redirect=${encodeURIComponent(redirect)}`
-              : product.url;
+              : (product.url || "/"); // fallback just in case
 
             const buyRel = !isAuthed && requiresAuth ? undefined : "noopener noreferrer";
             const buyTarget = !isAuthed && requiresAuth ? undefined : "_blank";
@@ -105,9 +106,9 @@ export default async function MerchantProductsPage({ params }: PageProps) {
 
                 <CardFooter className="pt-0">
                   <Button asChild className="w-full">
-                    <Link href={buyHref} target={buyTarget} rel={buyRel}>
+                    <a href={buyHref} target={buyTarget} rel={buyRel}>
                       {(!isAuthed && requiresAuth) ? "Sign in to buy" : "Buy"}
-                    </Link>
+                    </a>
                   </Button>
                 </CardFooter>
               </Card>
@@ -118,3 +119,4 @@ export default async function MerchantProductsPage({ params }: PageProps) {
     </main>
   );
 }
+
