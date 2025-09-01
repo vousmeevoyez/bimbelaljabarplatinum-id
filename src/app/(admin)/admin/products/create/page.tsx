@@ -14,7 +14,7 @@ export default async function CreateProductPage() {
   const session = await getSessionFromCookie();
 
   if (!session) {
-    redirect("/sign-in?redirect=/dashboard/products/create");
+    redirect("/sign-in?redirect=/admin/products/create");
   }
 
   const [result, error] = await getMerchantsAction();
@@ -25,11 +25,11 @@ export default async function CreateProductPage() {
       <PageHeader
         items={[
           {
-            href: "/dashboard/products",
+            href: "/admin/products",
             label: "Products"
           },
           {
-            href: "/dashboard/products/create",
+            href: "/admin/products/create",
             label: "Create Product"
           }
         ]}
@@ -41,7 +41,7 @@ export default async function CreateProductPage() {
           </div>
 
           <div className="border rounded-lg p-6 bg-card">
-            <CreateProductForm merchants={result.data}/>
+            <CreateProductForm merchants={result.data} />
           </div>
         </div>
       </div>

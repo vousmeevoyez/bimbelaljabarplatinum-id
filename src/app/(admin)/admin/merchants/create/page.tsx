@@ -13,7 +13,7 @@ export default async function CreateMerchantPage() {
   const session = await getSessionFromCookie();
 
   if (!session) {
-    redirect("/sign-in?redirect=/dashboard/merchants/create");
+    redirect("/sign-in?redirect=/admin/merchants/create");
   }
 
   return (
@@ -21,11 +21,11 @@ export default async function CreateMerchantPage() {
       <PageHeader
         items={[
           {
-            href: "/dashboard/merchants",
+            href: "/admin/merchants",
             label: "Merchants"
           },
           {
-            href: "/dashboard/merchants/create",
+            href: "/admin/merchants/create",
             label: "Create Merchant"
           }
         ]}

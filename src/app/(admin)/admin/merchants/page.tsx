@@ -29,25 +29,25 @@ export const metadata = {
 export default async function MerchantsIndexPage() {
   // Check authentication
   const session = await getSessionFromCookie();
-  if (!session) redirect("/sign-in?redirect=/dashboard/merchants");
+  if (!session) redirect("/sign-in?redirect=/admin/merchants");
 
   // Load merchants
   const [result, error] = await getMerchantsAction();
   let merchants: MerchantItem[] = [];
-  if (result?.success && result.data){
-    merchants = await Promise.all(result.data.map(async(data)=>{
+  if (result?.success && result.data) {
+    merchants = await Promise.all(result.data.map(async (data) => {
       let logoUrl: string | null = null;
-      if(data.logoUrl) {
+      if (data.logoUrl) {
         logoUrl = await getPresignedR2Url(data.logoUrl) || null
       };
-      return {...data, logoUrl}
+      return { ...data, logoUrl }
     }))
   }
   if (error) return notFound();
 
   return (
     <>
-      <PageHeader items={[{ href: "/dashboard/merchants", label: "Merchants" }]} />
+      <PageHeader items={[{ href: "/admin/merchants", label: "Merchants" }]} />
       <div className="container mx-auto px-5 pb-12">
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -55,7 +55,7 @@ export default async function MerchantsIndexPage() {
             <p className="text-muted-foreground mt-2">Manage your merchants</p>
           </div>
           <Button asChild>
-            <Link href={"/dashboard/merchants/create" as Route}>
+            <Link href={"/admin/merchants/create" as Route}>
               <PlusIcon className="h-4 w-4 mr-2" />
               Create Merchant
             </Link>
@@ -72,7 +72,7 @@ export default async function MerchantsIndexPage() {
             </CardContent>
             <CardFooter className="flex justify-center pb-8">
               <Button asChild>
-                <Link href={"/dashboard/merchants/create" as Route}>
+                <Link href={"/admin/merchants/create" as Route}>
                   <PlusIcon className="h-4 w-4 mr-2" />
                   Create your first merchant
                 </Link>
@@ -85,15 +85,15 @@ export default async function MerchantsIndexPage() {
               <Card key={merchant.id} className="h-full transition-all hover:border-primary hover:shadow-md">
                 <CardHeader className="flex items-start gap-4">
                   {merchant.logoUrl ? (
-                      <div className="relative h-12 w-12 rounded-md overflow-hidden">
-  <Image
-    src={merchant.logoUrl}
-    alt={`${merchant.name} logo`}
-    fill
-    className="object-cover"
-    sizes="48px"
-  />
-</div>
+                    <div className="relative h-12 w-12 rounded-md overflow-hidden">
+                      <Image
+                        src={merchant.logoUrl}
+                        alt={`${merchant.name} logo`}
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                      />
+                    </div>
                   ) : (
                     <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
                       <Users className="h-6 w-6" />
@@ -101,31 +101,31 @@ export default async function MerchantsIndexPage() {
                   )}
                   <div className="flex-1">
                     <CardTitle className="line-clamp-1">
-                        {merchant.name}
+                      {merchant.name}
                     </CardTitle>
-                      <br/>
+                    <br />
                     <CardDescription className="text-xs">
                       <Link
-                            href={`/dashboard/products?merchantId=${merchant.id}` as Route}
+                        href={`/admin/products?merchantId=${merchant.id}` as Route}
 
-                          className="hover:underline">
-                          View merchant products
+                        className="hover:underline">
+                        View merchant products
                       </Link>
 
-                      </CardDescription>
+                    </CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent />
                 <CardFooter className="flex justify-end gap-2">
                   <Button asChild variant="outline" size="sm">
-                    <Link href={`/dashboard/merchants/${merchant.id}/edit` as Route}>Edit</Link>
+                    <Link href={`/admin/merchants/${merchant.id}/edit` as Route}>Edit</Link>
                   </Button>
-                                          <DeleteConfirmation id={merchant.id} name={merchant.name} action={deleteMerchantAction} type="merchant" />
+                  <DeleteConfirmation id={merchant.id} name={merchant.name} action={deleteMerchantAction} type="merchant" />
                 </CardFooter>
               </Card>
             ))}
 
-            <Link href={"/dashboard/merchants/create" as Route}>
+            <Link href={"/admin/merchants/create" as Route}>
               <Card className="h-full border-dashed border-2 hover:border-primary transition-all">
                 <CardHeader className="text-center pt-8">
                   <CardTitle className="text-xl">Create a new merchant</CardTitle>

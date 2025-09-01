@@ -40,7 +40,7 @@ export function CreateMerchantForm() {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Merchant created successfully");
-      router.push(`/dashboard/merchants` as Route);
+      router.push(`/admin/merchants` as Route);
       router.refresh();
     }
   });

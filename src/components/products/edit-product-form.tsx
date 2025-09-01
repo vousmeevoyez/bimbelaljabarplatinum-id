@@ -50,7 +50,7 @@ export function EditProductForm({
     onSuccess: () => {
       toast.dismiss();
       toast.success("Product updated");
-      router.push(`/dashboard/products` as Route);
+      router.push(`/admin/products` as Route);
       router.refresh();
     }
   });

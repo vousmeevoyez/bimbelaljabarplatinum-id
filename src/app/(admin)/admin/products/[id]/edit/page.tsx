@@ -19,16 +19,16 @@ interface EditProductPageProps {
   }>;
 }
 
-export default async function EditProductPage({params}: EditProductPageProps) {
+export default async function EditProductPage({ params }: EditProductPageProps) {
   const { id } = await params;
   // Check if the user is authenticated
   const session = await getSessionFromCookie();
 
   if (!session) {
-    redirect("/sign-in?redirect=/dashboard/products/create");
+    redirect("/sign-in?redirect=/admin/products/create");
   }
 
-  const [result, error] = await getProductAction({productId: id});
+  const [result, error] = await getProductAction({ productId: id });
 
   if (error) return notFound();
 
@@ -46,11 +46,11 @@ export default async function EditProductPage({params}: EditProductPageProps) {
       <PageHeader
         items={[
           {
-            href: "/dashboard/products",
+            href: "/admin/products",
             label: "Products"
           },
           {
-            href: "/dashboard/products/create",
+            href: "/admin/products/create",
             label: "Edit Product"
           }
         ]}

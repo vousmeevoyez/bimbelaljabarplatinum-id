@@ -5,6 +5,8 @@ import type { Route } from 'next'
 import {
   Users,
   Shield,
+  Store,
+  ShoppingBag,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -33,10 +35,19 @@ export type NavMainItem = NavItem & {
 
 const adminNavItems: NavMainItem[] = [
   {
+    title: "Merchants",
+    url: "/admin/merchants",
+    icon: Store,
+  },
+  {
+    title: "Products",
+    url: "/admin/products",
+    icon: ShoppingBag,
+  },
+  {
     title: "Users",
-    url: "/admin",
+    url: "/admin/users",
     icon: Users,
-    isActive: true,
   },
 ]
 

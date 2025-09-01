@@ -4,19 +4,14 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
-import { redirect } from "next/navigation"
 
-export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const session = await requireAdmin({ doNotThrowError: true })
-
-  if (!session) {
-    return redirect('/')
-  }
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  await requireAdmin()
 
   return (
     <SidebarProvider>
       <AdminSidebar />
-      <SidebarInset className="w-full flex flex-col">
+      <SidebarInset>
         {children}
       </SidebarInset>
     </SidebarProvider>

@@ -23,7 +23,7 @@ export default async function EditMerchantPage({params}: EditMerchantPageProps) 
   const session = await getSessionFromCookie();
 
   if (!session) {
-    redirect("/sign-in?redirect=/dashboard/merchants/create");
+    redirect("/sign-in?redirect=/admin/merchants/create");
   }
 
   const [result, error] = await getMerchantAction({merchantId: id});
@@ -43,11 +43,11 @@ export default async function EditMerchantPage({params}: EditMerchantPageProps) 
       <PageHeader
         items={[
           {
-            href: "/dashboard/merchants",
+            href: "/admin/merchants",
             label: "Merchants"
           },
           {
-            href: "/dashboard/merchants/create",
+            href: "/admin/merchants/create",
             label: "Edit Merchant"
           }
         ]}

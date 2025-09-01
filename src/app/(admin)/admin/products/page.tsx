@@ -27,7 +27,7 @@ export default async function ProductsIndexPage({
   const merchantId = resolvedSearchParams?.merchantId;
   const qs = merchantId ? `?merchantId=${encodeURIComponent(merchantId)}` : "";
 
-  if (!session) redirect((`/sign-in?redirect=/dashboard/products${qs}`) as Route);
+  if (!session) redirect((`/sign-in?redirect=/admin/products${qs}`) as Route);
 
   // 👉 Pass merchantId to your server action
   const [result, error] = await getProductsAction({ merchantId });
@@ -44,11 +44,11 @@ export default async function ProductsIndexPage({
   }
   if (error) return notFound();
 
-  const createHref = (`/dashboard/products/create${qs}`) as Route;
+  const createHref = (`/admin/products/create${qs}`) as Route;
 
   return (
     <>
-      <PageHeader items={[{ href: "/dashboard/products", label: "Products" }]} />
+      <PageHeader items={[{ href: "/admin/products", label: "Products" }]} />
       <div className="container mx-auto px-5 pb-12">
         <div className="mb-8 flex items-center justify-between">
           <div>
@@ -92,14 +92,14 @@ export default async function ProductsIndexPage({
                   <tr key={product.id} className="border-t">
                     <td className="p-3">
                       {product.imageUrl ? (
-<Image
-  src={product.imageUrl}
-  alt={product.name || "Product image"}
-  width={40}
-  height={40}
-  className="h-10 w-10 rounded object-cover"
-  unoptimized
-/>
+                        <Image
+                          src={product.imageUrl}
+                          alt={product.name || "Product image"}
+                          width={40}
+                          height={40}
+                          className="h-10 w-10 rounded object-cover"
+                          unoptimized
+                        />
                       ) : (
                         <div className="flex h-10 w-10 items-center justify-center rounded bg-muted">
                           <ShoppingBag className="h-5 w-5" />
@@ -107,7 +107,7 @@ export default async function ProductsIndexPage({
                       )}
                     </td>
                     <td className="p-3">
-                      <Link href={`/dashboard/products/${product.id}` as Route} className="hover:underline">
+                      <Link href={`/admin/products/${product.id}` as Route} className="hover:underline">
                         {product.name}
                       </Link>
                     </td>
@@ -118,7 +118,7 @@ export default async function ProductsIndexPage({
                     <td className="p-3">{product.url}</td>
                     <td className="p-3 text-right flex justify-end gap-2">
                       <Button asChild variant="outline" size="sm">
-                        <Link href={`/dashboard/products/${product.id}/edit` as Route}>Edit</Link>
+                        <Link href={`/admin/products/${product.id}/edit` as Route}>Edit</Link>
                       </Button>
                       <DeleteConfirmation id={product.id} name={product.name} action={deleteProductAction} type="product" />
                     </td>

@@ -51,7 +51,7 @@ export function EditMerchantForm({ merchant }: { merchant: Merchant }) {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Merchant updated successfully");
-      router.push(`/dashboard/merchants` as Route);
+      router.push(`/admin/merchants` as Route);
       router.refresh();
     }
   });

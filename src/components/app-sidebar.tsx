@@ -6,8 +6,6 @@ import type { Route } from 'next'
 import {
   Building2,
   SquareTerminal,
-  Store,
-  ShoppingBag
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -81,16 +79,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         url: "/dashboard",
         icon: SquareTerminal,
         isActive: true,
-      },
-      {
-        title: "Merchants",
-        url: "/dashboard/merchants" as Route,
-        icon: Store,
-      },
-      {
-        title: "Products",
-        url: "/dashboard/products" as Route,
-        icon: ShoppingBag,
       },
     ],
     projects: [

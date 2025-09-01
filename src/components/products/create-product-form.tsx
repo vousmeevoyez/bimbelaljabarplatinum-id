@@ -45,7 +45,7 @@ export function CreateProductForm({ merchants }: { merchants: MerchantOption[] }
     onSuccess: () => {
       toast.dismiss();
       toast.success("Product created successfully");
-      router.push(`/dashboard/products` as Route);
+      router.push(`/admin/products` as Route);
       router.refresh();
     }
   });
