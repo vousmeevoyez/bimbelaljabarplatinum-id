@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { getMerchantsAction } from "@/actions/merchant-actions";
 import { getPresignedR2Url } from "@/lib/s3";
 
-const pluralize = (n: number, w: string) => `${n} ${w}${n === 1 ? "" : "s"}`;
+const formatJumlahProduk = (n: number) => `${n} produk`;
 
 export default async function MerchantsIndexPage() {
   const [result, error] = await getMerchantsAction();
@@ -34,26 +34,28 @@ export default async function MerchantsIndexPage() {
         {merchants.length === 0 ? (
           <Card className="col-span-full">
             <CardHeader>
-              <CardTitle>No merchants yet</CardTitle>
-              <CardDescription>Create your first merchant to get started.</CardDescription>
+              <CardTitle>Belum ada merchant</CardTitle>
+              <CardDescription>Buat merchant pertama Anda untuk memulai.</CardDescription>
             </CardHeader>
           </Card>
         ) : (
           merchants.map((merchant) => (
             <Card key={merchant.id} className="h-full overflow-hidden hover:shadow-sm transition-shadow">
               <div className="relative w-full aspect-[4/3]">
-                {merchant.logoUrl && <Image
-                  src={merchant.logoUrl}
-                  alt={`${merchant.name} logo`}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  className="object-cover"
-                  priority={false}
-    unoptimized
-                />}
+                {merchant.logoUrl && (
+                  <Image
+                    src={merchant.logoUrl}
+                    alt={`Logo ${merchant.name}`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover"
+                    priority={false}
+                    unoptimized
+                  />
+                )}
                 <div className="absolute top-3 right-3">
                   <Badge variant="secondary" className="backdrop-blur">
-                    {pluralize(merchant.productCount ?? 0, "product")}
+                    {formatJumlahProduk(merchant.productCount ?? 0)}
                   </Badge>
                 </div>
               </div>
@@ -67,11 +69,13 @@ export default async function MerchantsIndexPage() {
 
               <CardContent className="pt-0 flex-1" />
 
-              {merchant.productCount !== 0 &&<CardFooter className="pt-0">
-                <Button asChild className="w-full">
-                    <Link href={`/${merchant.id}`}>View products</Link>
-                </Button>
-              </CardFooter>}
+              {merchant.productCount !== 0 && (
+                <CardFooter className="pt-0">
+                  <Button asChild className="w-full">
+                    <Link href={`/${merchant.id}`}>Lihat produk</Link>
+                  </Button>
+                </CardFooter>
+              )}
             </Card>
           ))
         )}

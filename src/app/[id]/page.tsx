@@ -11,15 +11,13 @@ import Link from "next/link";
 import type { Route } from "next";
 import { getSessionFromCookie } from "@/utils/auth";
 
-export const metadata = { title: "My Merchants", description: "Manage your merchants" };
+export const metadata = { title: "Merchant Saya", description: "Kelola merchant Anda" };
 
 interface MerchantProductsPageProps {
   params: Promise<{ id: string }>
 }
 
-export default async function MerchantProductsPage(
-  { params }: MerchantProductsPageProps
-) {
+export default async function MerchantProductsPage({ params }: MerchantProductsPageProps) {
   const { id } = await params
 
   const session = await getSessionFromCookie();
@@ -48,13 +46,13 @@ export default async function MerchantProductsPage(
       {!isAuthed && products.some(p => (p.priceCents ?? 0) > 0) && (
         <Card>
           <CardHeader>
-            <CardTitle>Sign in to see paid products</CardTitle>
-            <CardDescription>Some items are hidden. Sign in to view and purchase them.</CardDescription>
+            <CardTitle>Masuk untuk melihat produk berbayar</CardTitle>
+            <CardDescription>Beberapa item disembunyikan. Masuk untuk melihat dan membelinya.</CardDescription>
           </CardHeader>
           <CardFooter>
             <Button asChild>
               <Link href={`/sign-in?redirect=${encodeURIComponent(redirect)}` as Route}>
-                Sign in / Sign up
+                Masuk / Daftar
               </Link>
             </Button>
           </CardFooter>
@@ -64,9 +62,9 @@ export default async function MerchantProductsPage(
         {visibleProducts.length === 0 ? (
           <Card className="col-span-full">
             <CardHeader>
-              <CardTitle>No products yet</CardTitle>
+              <CardTitle>Belum ada produk</CardTitle>
               <CardDescription>
-                {isAuthed ? "Create your first product to get started." : "Nothing to show. Sign in to see paid products if available."}
+                {isAuthed ? "Buat produk pertama Anda untuk memulai." : "Belum ada yang bisa ditampilkan. Masuk untuk melihat produk berbayar jika tersedia."}
               </CardDescription>
             </CardHeader>
           </Card>
@@ -84,7 +82,7 @@ export default async function MerchantProductsPage(
                 <div className="relative w-full aspect-[4/3]">
                   <Image
                     src={product.imageUrl || "/placeholder.svg"}
-                    alt={`${product.name} logo`}
+                    alt={`Logo ${product.name}`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover"
@@ -97,7 +95,7 @@ export default async function MerchantProductsPage(
                   </div>
                   <Badge variant="secondary" className="text-base px-3 py-1 shrink-0">
                     {product.priceCents === 0
-                      ? "Free"
+                      ? "Gratis"
                       : new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR" }).format(product.priceCents)}
                   </Badge>
                 </CardHeader>
@@ -105,7 +103,7 @@ export default async function MerchantProductsPage(
                 <CardFooter className="pt-0">
                   <Button asChild className="w-full">
                     <a href={buyHref} target={buyTarget} rel={buyRel}>
-                      {(!isAuthed && requiresAuth) ? "Sign in to buy" : "Buy"}
+                      {(!isAuthed && requiresAuth) ? "Masuk untuk membeli" : "Beli"}
                     </a>
                   </Button>
                 </CardFooter>
@@ -117,4 +115,3 @@ export default async function MerchantProductsPage(
     </main>
   );
 }
-
