@@ -10,12 +10,14 @@ import { verifyEmailAction } from "./verify-email.action";
 import { verifyEmailSchema } from "@/schemas/verify-email.schema";
 import { Spinner } from "@/components/ui/spinner";
 import { REDIRECT_AFTER_SIGN_IN } from "@/constants";
+import { useSessionStore } from "@/state/session";
 
 export default function VerifyEmailClientComponent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const hasCalledVerification = useRef(false);
+  const fetchSession = useSessionStore((store) => store.fetchSession);
 
   const { execute: handleVerification, isPending, error } = useServerAction(verifyEmailAction, {
     onError: ({ err }) => {
@@ -25,15 +27,22 @@ export default function VerifyEmailClientComponent() {
     onStart: () => {
       toast.loading("Verifying your email...");
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.dismiss();
       toast.success("Email verified successfully");
 
+      // Force session refresh to update the client state
       router.refresh();
-
+      
+      // Explicitly fetch session to ensure state is updated
+      if (fetchSession) {
+        await fetchSession();
+      }
+      
+      // Additional delay to ensure session is updated
       setTimeout(() => {
         router.push(REDIRECT_AFTER_SIGN_IN);
-      }, 500);
+      }, 1000);
     },
   });
 

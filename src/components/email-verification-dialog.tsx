@@ -12,11 +12,11 @@ import { useSessionStore } from "@/state/session";
 import { useServerAction } from "zsa-react";
 import { resendVerificationAction } from "@/app/(auth)/resend-verification.action";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
 import { Alert } from "@heroui/react"
 import isProd from "@/utils/is-prod";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Route } from "next";
 
 const pagesToBypass: Route[] = [
@@ -31,9 +31,43 @@ const pagesToBypass: Route[] = [
 ];
 
 export function EmailVerificationDialog() {
-  const { session } = useSessionStore();
+  const { session, fetchSession } = useSessionStore();
   const [lastResendTime, setLastResendTime] = useState<number | null>(null);
+  const [initialRenderTime] = useState<number>(Date.now());
+  const [currentTime, setCurrentTime] = useState<number>(Date.now());
+  const [isVerifying, setIsVerifying] = useState(false);
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Update current time every second to show countdown
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentTime(Date.now());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  // Check if we're on the verify-email page and set verifying state
+  useEffect(() => {
+    const hasToken = searchParams.get("token");
+    if (pathname === "/verify-email" && hasToken) {
+      setIsVerifying(true);
+    } else {
+      setIsVerifying(false);
+    }
+  }, [pathname, searchParams]);
+
+  // Periodically refresh session when verifying to catch verification completion
+  useEffect(() => {
+    if (isVerifying && fetchSession) {
+      const interval = setInterval(() => {
+        fetchSession();
+      }, 2000); // Check every 2 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [isVerifying, fetchSession]);
 
   const { execute: resendVerification, status } = useServerAction(resendVerificationAction, {
     onError: (error) => {
@@ -51,16 +85,28 @@ export function EmailVerificationDialog() {
   });
 
   // Don't show the dialog if the user is not logged in, if their email is already verified,
-  // or if we're on the verify-email page
+  // or if we're on the verify-email page (unless we're actively verifying)
   if (
     !session
     || session.user.emailVerified
-    || pagesToBypass.includes(pathname as Route)
+    || (pagesToBypass.includes(pathname as Route) && !isVerifying)
   ) {
     return null;
   }
 
-  const canResend = !lastResendTime || Date.now() - lastResendTime > 60000; // 1 minute cooldown
+  // Calculate time remaining for resend button
+  const timeSinceLastResend = lastResendTime ? currentTime - lastResendTime : Infinity;
+  const timeSinceInitialRender = currentTime - initialRenderTime;
+  
+  // Must wait at least 2 minutes from initial render OR 2 minutes from last resend
+  const cooldownPeriod = 120000; // 2 minutes
+  const canResend = timeSinceInitialRender >= cooldownPeriod && timeSinceLastResend >= cooldownPeriod;
+  
+  // Calculate remaining time for display
+  const remainingTime = Math.max(
+    cooldownPeriod - timeSinceInitialRender,
+    lastResendTime ? cooldownPeriod - timeSinceLastResend : 0
+  );
   const isLoading = status === "pending";
 
   return (
@@ -94,7 +140,7 @@ export function EmailVerificationDialog() {
             {isLoading
               ? "Sending..."
               : !canResend
-                ? "Please wait 1 minute before resending"
+                ? `Please wait ${Math.ceil(remainingTime / 1000)} seconds before resending`
                 : "Resend verification email"}
           </Button>
         </div>
