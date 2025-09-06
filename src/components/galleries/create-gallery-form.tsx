@@ -15,13 +15,12 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
 import { createGalleryAction } from "@/actions/gallery-actions";
-import { imageUploadSchema, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
+import { imageUploadSpecDescription } from "@/schemas/image-upload.schema";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 
 const formSchema = z.object({
   description: z.string().max(2500, "Description is too long").optional(),
-}).extend({
-  image: imageUploadSchema.shape.image,
+  image: z.instanceof(FileList).optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -51,9 +50,14 @@ export function CreateGalleryForm() {
   });
 
   function onSubmit(data: FormValues) {
+    if (!data.image || data.image.length === 0) {
+      toast.error("Please select an image");
+      return;
+    }
+    
     create({
       description: data.description,
-      image: data.image,
+      image: data.image[0],
     });
   }
 

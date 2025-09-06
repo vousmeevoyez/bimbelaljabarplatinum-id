@@ -11,7 +11,6 @@ import {
   Form, FormControl, FormDescription, FormField,
   FormItem, FormLabel, FormMessage
 } from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
@@ -20,8 +19,10 @@ import { imageUploadSpecDescription } from "@/schemas/image-upload.schema";
 import type { Gallery } from "@/db/schema";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 
+
 const formSchema = z.object({
   description: z.string().max(1000, "Max 1000 characters").optional(),
+  image: z.instanceof(FileList).optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>;
@@ -44,7 +45,7 @@ export function EditGalleryForm({ gallery }: EditGalleryFormProps) {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Gallery item updated successfully");
-      router.push("/admin/gallery" as Route);
+      router.push("/admin/galleries" as Route);
       router.refresh();
     }
   });
@@ -61,7 +62,7 @@ export function EditGalleryForm({ gallery }: EditGalleryFormProps) {
     updateGallery({
       galleryId: gallery.id,
       description: data.description || undefined,
-      image: data.image ?? undefined,
+      image: data.image && data.image.length > 0 ? data.image[0] : undefined,
     });
   }
 

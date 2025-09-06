@@ -1,7 +1,7 @@
 import { getSessionFromCookie } from "@/utils/auth";
 import { redirect, notFound } from "next/navigation";
 import { PageHeader } from "@/components/page-header";
-import { EditGalleryForm } from "@/components/galleriesedit-gallery-form";
+import { EditGalleryForm } from "@/components/galleries/edit-gallery-form";
 import { getGalleryAction } from "@/actions/gallery-actions";
 import { getPresignedR2Url } from "@/lib/s3";
 import type { Route } from "next";
@@ -37,11 +37,11 @@ export default async function EditGalleryPage({ params }: EditGalleryPageProps) 
 
   return (
     <>
-      <PageHeader 
+      <PageHeader
         items={[
-          { href: "/admin/gallery", label: "Gallery" },
-          { href: `/admin/gallery/${galleryId}/edit`, label: "Edit" }
-        ]} 
+          { href: "/admin/galleries", label: "Gallery" },
+          { href: `/admin/galleries/${galleryId}/edit`, label: "Edit" }
+        ]}
       />
       <div className="container mx-auto px-5 pb-12">
         <div className="mb-8">
