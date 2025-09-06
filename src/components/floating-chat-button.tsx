@@ -1,6 +1,6 @@
 "use client";
 
-import { MessageCircle, X, Phone, Mail } from "lucide-react";
+import { MessageCircle, X } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import {
     SiWhatsapp as Whatsapp,
   } from 'react-icons/si';
-  
+
 interface FloatingChatButtonProps {
   className?: string;
 }
@@ -43,7 +43,7 @@ export function FloatingChatButton({ className }: FloatingChatButtonProps) {
               Chat dengan tim dukungan kami untuk bantuan instan.
             </p>
             <div className="space-y-2">
-              <Button 
+              <Button
                 onClick={handleChatClick}
                 className="w-full"
                 size="sm"
