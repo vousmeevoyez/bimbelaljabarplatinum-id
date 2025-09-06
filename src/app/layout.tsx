@@ -6,6 +6,7 @@ import "server-only";
 import { ThemeProvider } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { FloatingChatButton } from "@/components/floating-chat-button";
 import NextTopLoader from 'nextjs-toploader'
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/constants";
 
@@ -73,6 +74,7 @@ export default function BaseLayout({
             skipDelayDuration={50}
           >
             {children}
+            <FloatingChatButton />
           </TooltipProvider>
         </ThemeProvider>
         <Toaster richColors closeButton position="top-right" expand duration={7000} />
