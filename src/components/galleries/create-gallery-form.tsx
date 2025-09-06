@@ -14,48 +14,46 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
-import { createMerchantAction } from "@/actions/merchant-actions";
+import { createGalleryAction } from "@/actions/gallery-actions";
 import { imageUploadSchema, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 
 const formSchema = z.object({
-  name: z.string().min(1, "Merchant name is required").max(100, "Merchant name is too long"),
-  description: z.string().max(1000, "Description is too long").optional(),
+  description: z.string().max(2500, "Description is too long").optional(),
 }).extend({
-  image: imageUploadSchema.shape.image.nullable().optional(),
+  image: imageUploadSchema.shape.image,
 });
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function CreateMerchantForm() {
+export function CreateGalleryForm() {
   const router = useRouter();
 
-  const { execute: createMerchant } = useServerAction(createMerchantAction, {
+  const { execute: create } = useServerAction(createGalleryAction, {
     onError: (error) => {
       toast.dismiss();
-      toast.error(error.err?.message || "Failed to create merchant");
+      toast.error(error.err?.message || "Failed to create gallery");
     },
     onStart: () => {
-      toast.loading("Creating merchant...");
+      toast.loading("Creating gallery...");
     },
     onSuccess: () => {
       toast.dismiss();
-      toast.success("Merchant created successfully");
-      router.push(`/admin/merchants` as Route);
+      toast.success("Gallery created successfully");
+      router.push(`/admin/galleries` as Route);
       router.refresh();
     }
   });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", description: "", image: undefined },
+    defaultValues: { description: "", image: undefined },
   });
 
   function onSubmit(data: FormValues) {
-    createMerchant({
-      name: data.name,
-      description: data.description?? undefined,
-      logo: data.image ?? undefined,
+    create({
+      description: data.description,
+      image: data.image,
     });
   }
 
@@ -64,27 +62,14 @@ export function CreateMerchantForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Merchant Name</FormLabel>
-              <FormControl><Input placeholder="Enter merchant name" {...field} /></FormControl>
-              <FormDescription>A unique name for your merchant</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="description"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter a brief description of your merchant" {...field} value={field.value || ""} />
+                <Textarea placeholder="Enter a brief description of your photo" {...field} value={field.value || ""} />
               </FormControl>
-              <FormDescription>Optional description of your merchant&apos;s purpose</FormDescription>
+              <FormDescription>Optional description of your photo&apos;s purpose</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -95,7 +80,7 @@ export function CreateMerchantForm() {
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Logo</FormLabel>
+              <FormLabel>Photo</FormLabel>
               <FormControl>
                 <Input
                   type="file"
@@ -105,13 +90,13 @@ export function CreateMerchantForm() {
                   ref={field.ref}
                 />
               </FormControl>
-              <FormDescription>{`Optional logo for your merchant.`}<br/> {imageUploadSpecDescription()}</FormDescription>
+              <FormDescription>{imageUploadSpecDescription()}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full">Create Merchant</Button>
+        <Button type="submit" className="w-full">Create Gallery</Button>
       </form>
     </Form>
   );

@@ -1,6 +1,5 @@
+import { MAX_IMAGE_SIZE, ACCEPTED_IMAGE_TYPES } from "@/constants";
 import { z } from "zod";
-export const MAX_IMAGE_SIZE = 2 * 1024 * 1024;
-export const ACCEPTED_IMAGE_TYPES = ["image/jpeg","image/png","image/webp"] as const;
 
 type ImageMime = typeof ACCEPTED_IMAGE_TYPES[number] | "image/gif" | "image/avif";
 

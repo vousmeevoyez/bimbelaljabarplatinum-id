@@ -158,6 +158,20 @@ export const productRelations = relations(productTable, ({ one }) => ({
   }),
 }));
 
+// --- gallery ---
+export const galleryTable = sqliteTable(
+  "gallery",
+  {
+    ...commonColumns,
+    id: text().primaryKey().$defaultFn(() => `gal_${createId()}`).notNull(),
+    imageUrl: text({ length: 600 }).notNull(),
+    description: text({ length: 1000 }),
+  },
+  (table) => ({
+    imageIdx: index("gallery_image_idx").on(table.imageUrl),
+  })
+);
+
 // --- (optional) handy types ---
 export type Merchant = InferSelectModel<typeof merchantTable>;
 export type MerchantWithCount = Merchant & { productCount: number };
@@ -167,6 +181,7 @@ export type Product = InferSelectModel<typeof productTable> & {  merchant: {
     slug: string;
   };
 };
+export type Gallery = InferSelectModel<typeof galleryTable>;
 
 export type User = InferSelectModel<typeof userTable>;
 export type PassKeyCredential = InferSelectModel<typeof passKeyCredentialTable>;
