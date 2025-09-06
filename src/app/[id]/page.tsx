@@ -7,8 +7,6 @@ import type { Product } from "@/db/schema";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { getPresignedR2Url } from "@/lib/s3";
 import { getProductsAction } from "@/actions/product-actions";
-import Link from "next/link";
-import type { Route } from "next";
 import { getSessionFromCookie } from "@/utils/auth";
 
 export const metadata = { title: "Merchant Saya", description: "Kelola merchant Anda" };
@@ -37,29 +35,13 @@ export default async function MerchantProductsPage({ params }: MerchantProductsP
 
   if (error) return notFound();
 
-  const visibleProducts = isAuthed ? products : products.filter(p => (p.priceCents ?? 0) === 0);
   const redirect = `/${id}`;
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-8 space-y-6">
       <Separator />
-      {!isAuthed && products.some(p => (p.priceCents ?? 0) > 0) && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Masuk untuk melihat produk berbayar</CardTitle>
-            <CardDescription>Beberapa item disembunyikan. Masuk untuk melihat dan membelinya.</CardDescription>
-          </CardHeader>
-          <CardFooter>
-            <Button asChild>
-              <Link href={`/sign-in?redirect=${encodeURIComponent(redirect)}` as Route}>
-                Masuk / Daftar
-              </Link>
-            </Button>
-          </CardFooter>
-        </Card>
-      )}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {visibleProducts.length === 0 ? (
+        {products.length === 0 ? (
           <Card className="col-span-full">
             <CardHeader>
               <CardTitle>Belum ada produk</CardTitle>
@@ -69,7 +51,7 @@ export default async function MerchantProductsPage({ params }: MerchantProductsP
             </CardHeader>
           </Card>
         ) : (
-          visibleProducts.map((product) => {
+          products.map((product) => {
             const requiresAuth = (product.priceCents ?? 0) > 0;
             const buyHref = !isAuthed && requiresAuth
               ? `/sign-in?redirect=${encodeURIComponent(redirect)}`
@@ -103,7 +85,7 @@ export default async function MerchantProductsPage({ params }: MerchantProductsP
                 <CardFooter className="pt-0">
                   <Button asChild className="w-full">
                     <a href={buyHref} target={buyTarget} rel={buyRel}>
-                      {(!isAuthed && requiresAuth) ? "Masuk untuk membeli" : "Beli"}
+                      {(!isAuthed && requiresAuth) ? "Masuk/daftar untuk membeli" : "Beli"}
                     </a>
                   </Button>
                 </CardFooter>
