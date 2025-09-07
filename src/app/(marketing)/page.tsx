@@ -288,7 +288,7 @@ export default function Landing() {
                   className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
                 >
                   <MapPinHouse className="group-hover:scale-110 transition" />
-                  <span className="font-semibold">Bimbel Aljabar Platinum
+                  <span className="font-semibold line-clamp-2">Bimbel Aljabar Platinum
 JL Nubala, RT 04/RW17, Pisangan, Kec Ciputat, Kota Tangerang Selatan</span>
                 </a>
                 <a
