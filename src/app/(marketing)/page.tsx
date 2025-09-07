@@ -11,7 +11,7 @@ export default function Landing() {
   const features = [
   { title: "Yayasan Suara Pelajar Indonesia", description: "Menaungi 2 sekolah: SDI Plus Darul Ulum Limo SMP Islam Darul Ulum Ilmi Limo", image: "/card-1.png", bgColor: "bg-emc-blue" },
   { title: "Materi sesuai kurikulum sekolah dan kisi-kisi soal komplit dengan cara-cara cepat", description: "Karena soal-soal lomba sesuai dengan materi sekolah, maka kamu yang tidak suka menjadi suka matematika setelah mengikuti lomba", image: "/card-2.png", bgColor: "bg-emc-blue" },
-  { title: "BIMBEL ALJABAR PLATINUM", description: "Tips dan Trik Matematika", image: "/card-3.png", bgColor: "bg-emc-blue" },
+  { title: "BIMBEL ALJABAR PLATINUM", description: "Tips dan Trik Matematika", image: "/card-3.jpeg", bgColor: "bg-emc-blue" },
   { title: "Goes to Kurasi Puspresnas", description: "Sebagai bentuk apresiasi, kamu akan mendapatkan sertifikat elektronik dan uang tunai", image: "/card-4.png", bgColor: "bg-emc-blue" },
 ];
 
