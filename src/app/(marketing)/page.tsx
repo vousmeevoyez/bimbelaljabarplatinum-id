@@ -24,11 +24,11 @@ export default function Landing() {
         {/* Header Banner - Centered and Transparent */}
 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
   <div className="flex items-center justify-center space-x-4">
-    <img src="/LOGO.png" alt="Left Logo" className="w-20 h-20" />
+    <Image src="/LOGO.png" alt="Left Logo" width={80} height={80} className="w-20 h-20" />
     <h1 className="md:text-2xl text-xl font-bold text-[#fbde0e] mb-2">
       Membumikan Matematika
     </h1>
-    <img src="/LOGO2.png" alt="Right Logo" className="w-20 h-20" />
+    <Image src="/LOGO3.png" alt="Right Logo" width={80} height={80}/>
   </div>
   <div className="w-48 h-1 bg-yellow-400 mx-auto rounded"></div>
 </div>
