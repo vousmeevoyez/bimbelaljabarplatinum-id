@@ -1,4 +1,4 @@
-import { ArrowRight, FileDown } from 'lucide-react'
+import { ArrowRight, FileDown, Instagram, Facebook, Phone, MapPinHouse } from 'lucide-react'
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
@@ -140,6 +140,8 @@ export default function Landing() {
         <Image
           src="/trophy.png"
           alt="Winner Podium"
+          width={400}
+          height={400}
           className="rounded-xl shadow-lg"
         />
       </div>
@@ -255,6 +257,107 @@ export default function Landing() {
 
         </div>
       </section>
+
+      {/* Contact & Social Section */}
+      <section
+        className="relative flex items-center overflow-hidden py-12"
+        style={{ backgroundImage: 'url(/bg-2.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+      >
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-4xl font-bold text-[#fbde0e] text-center mb-12">
+            Hubungi Kami
+          </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            {/* Left: Social Links */}
+            <div className="space-y-6">
+              <div className="flex flex-col gap-4">
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
+                >
+                  <Phone className="group-hover:scale-110 transition" />
+                  <span className="font-semibold">+62 895 1546 6266</span>
+                </a>
+                <a
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
+                >
+                  <MapPinHouse className="group-hover:scale-110 transition" />
+                  <span className="font-semibold">Bimbel Aljabar Platinum
+JL Nubala, RT 04/RW17, Pisangan, Kec Ciputat, Kota Tangerang Selatan</span>
+                </a>
+                <a
+                  href="https://www.instagram.com/aljabar_platinum"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
+                >
+                  <Instagram className="group-hover:scale-110 transition" />
+                  <span className="font-semibold">@aljabar_platinum</span>
+                </a>
+                <a
+                  href="https://facebook.com/BimbelAljabarPlatinum"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
+                >
+                  <Facebook className="group-hover:scale-110 transition" />
+                  <span className="font-semibold">Bimbel AljabarPlatinum</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Right: Map / CTA Card */}
+            <div className="bg-white/10 text-white rounded-2xl p-4 shadow-2xl backdrop-blur-md">
+              <div className="aspect-[4/3] w-full overflow-hidden rounded-xl">
+                <iframe
+                  title="Lokasi Bimbel Aljabar Platinum"
+                  className="w-full h-full"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  src={
+                    "https://www.google.com/maps?q=JL%20Nubala%20Pisangan%20Ciputat%20Tangerang%20Selatan&output=embed"
+                  }
+                />
+              </div>
+              <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a
+                  href="https://maps.app.goo.gl/QCrhyGVDof3QtKvZ6?g_st=awb"
+                  rel="noopener noreferrer"
+                  className="text-center font-bold bg-green-600 hover:bg-green-700 rounded-xl py-3 shadow-lg"
+                >
+                    SD
+                </a>
+                <a
+                  href="https://maps.app.goo.gl/5iqt5hWZccMeq6Jh8?g_st=awb"
+                  rel="noopener noreferrer"
+                  className="text-center font-bold bg-black/70 hover:bg-black/80 rounded-xl py-3 shadow-lg"
+                >
+                    SMP
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Partner strip */}
+      <div className="relative z-10 w-full">
+        <div className="mx-6 mb-6 bg-red-600 text-white rounded-t-3xl shadow-2xl">
+          <div className="max-w-7xl mx-auto px-6 py-6 space-y-2">
+            <p className="font-extrabold tracking-wide">Partner By :</p>
+            <p className="font-semibold">Yayasan Suara Pelajar Indonesia</p>
+            <p className="text-white/95">
+              JL Limo Raya 6, No 124, RT 06/ RW 01 Limo, Kec Limo, Kota Depok
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* Footer */}
 
