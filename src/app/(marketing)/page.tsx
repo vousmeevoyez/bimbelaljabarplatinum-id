@@ -48,7 +48,8 @@ export default function Landing() {
   </Button>
 </a>
 <a
-  href="https://docs.google.com/document/d/1PCtFpuN7aHbpEAqDQaPdrJqsUSmlh4336QpYamsNBS0/edit?tab=t.0"
+  href="/flyer.png"
+  download
   target="_blank"
   rel="noopener noreferrer"
 >
@@ -57,7 +58,7 @@ export default function Landing() {
   </Button>
 </a>
 <a
-  href="https://docs.google.com/document/d/1PCtFpuN7aHbpEAqDQaPdrJqsUSmlh4336QpYamsNBS0/edit?tab=t.0"
+  href="https://bimbelaljabarplatinum.id"
   target="_blank"
   rel="noopener noreferrer"
 >
