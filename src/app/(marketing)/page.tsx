@@ -58,7 +58,7 @@ export default function Landing() {
   </Button>
 </a>
 <a
-  href="https://bimbelaljabarplatinum.id"
+  href="https://bimbelaljabarplatinum.id/products"
   target="_blank"
   rel="noopener noreferrer"
 >
@@ -86,7 +86,7 @@ export default function Landing() {
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-emc-blue mb-8">
-            Pendaftaran EMC akan ditutup dalam..
+            Pendaftaran AJP akan ditutup dalam..
           </h2>
 
           <div className="flex justify-center gap-6 mb-8">
@@ -127,6 +127,101 @@ export default function Landing() {
   </div>
 </section>
 
+
+        {/* Prizes Section */}
+
+<section
+  className="relative flex items-center overflow-hidden py-12"
+  style={{ backgroundImage: 'url(/bg-2.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+>
+  <div className="max-w-7xl mx-auto px-6">
+
+    {/* Centered Heading */}
+    <h2 className="text-4xl font-bold text-[#fbde0e] mb-12 text-center">
+            Hadiah dan Juara
+    </h2>
+
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      {/* Left: Placeholder Image */}
+      <div className="flex justify-center">
+        <img
+          src="/trophy.png"
+          alt="Winner Podium"
+          className="rounded-xl shadow-lg"
+        />
+      </div>
+
+      {/* Right: Prizes */}
+      <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          {[
+            {
+              rank: "Juara 1",
+              color: "bg-emc-pink",
+              medal: "Medali Emas",
+              savings: "Rp1.500.000",
+              benefits: ["Sertifikat Pemenang Goes to Terkurasi Puspresnas", "Trophy & Piagam Penghargaan (untuk juara tiap jenjang)", "Benefit tambahan sesuai kebijakan panitia"]
+            },
+            {
+              rank: "Juara 2",
+              color: "bg-emc-turquoise",
+              medal: "Medali Perak",
+              savings: "Rp1.000.000",
+              benefits: ["Sertifikat Pemenang Goes to Terkurasi Puspresnas", "Trophy & Piagam Penghargaan (untuk juara tiap jenjang)", "Benefit tambahan sesuai kebijakan panitia"]
+            },
+            {
+              rank: "Juara 3",
+              color: "bg-emc-pink",
+              medal: "Medali Perunggu",
+              savings: "Rp750.000",
+              benefits: ["Sertifikat Pemenang Goes to Terkurasi Puspresnas", "Trophy & Piagam Penghargaan (untuk juara tiap jenjang)", "Benefit tambahan sesuai kebijakan panitia"]
+            },
+          ].map((prize, index) => (
+            <Card key={index} className="border-0 bg-[#fbde0e] overflow-hidden shadow-md">
+              <div className={`text-black text-center font-bold`}>
+                {prize.rank}
+              </div>
+              <CardContent className="p-4 space-y-2 text-sm text-left">
+                <div>• Uang Tunai {prize.savings}</div>
+                {prize.benefits.map((benefit, i) => (
+                  <div key={i}>• {benefit}</div>
+                ))}
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+       {/* Gallery Section */}
+      <section className="py-16 bg-emc-yellow">
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-4xl font-bold text-emc-blue text-center mb-12">
+            Galeri AJP
+          </h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+            {[
+              "/wa-1.jpeg",
+              "/wa-2.jpeg",
+              "/wa-3.jpeg",
+            ].map((src, index) => (
+              <div key={index} className="aspect-square rounded-lg overflow-hidden border-4 border-white shadow-lg">
+                <Image
+                  src={src}
+                  alt={`Gallery ${index + 1}`}
+                  width={300}
+                  height={300}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform"
+                />
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
 
     </div>
   );
