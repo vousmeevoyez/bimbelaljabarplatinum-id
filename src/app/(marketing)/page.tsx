@@ -1,11 +1,13 @@
-import { ArrowRight, FileDown } from 'lucide-react'
+import { ArrowRight, FileDown, Phone, MapPin, Instagram, Facebook } from 'lucide-react'
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { CountdownTimer } from "@/components/countdown-timer";
+import { Separator } from '@/components/ui/separator';
 
 export default function Landing() {
       const targetDate = new Date("2025-09-10T00:00:00");
+const numbers = [1,2,3,4,5,6,7,8,9];
 
   const features = [
   { title: "Yayasan Suara Pelajar Indonesia", description: "Menaungi 2 sekolah: SDI Plus Darul Ulum Limo SMP Islam Darul Ulum Ilmi Limo", image: "/card-1.png", bgColor: "bg-emc-blue" },
@@ -43,17 +45,16 @@ export default function Landing() {
   target="_blank"
   rel="noopener noreferrer"
 >
-  <Button className="inline-flex items-center justify-start gap-2 min-w-[250px] bg-[#1f6dc2] hover:bg-emc-yellow/90 text-[#fbde0e] font-bold rounded-full px-6 py-3">
+  <Button className="inline-flex items-center justify-start gap-2 min-w-[250px] bg-[#1f6dc2] hover:bg-emc-yellow/90 text-white font-bold rounded-full px-6 py-3">
     <FileDown /> Juknis AJP Expo 2025
   </Button>
 </a>
 <a
   href="/flyer.png"
-  download
   target="_blank"
   rel="noopener noreferrer"
 >
-  <Button className="inline-flex items-center justify-start gap-2 min-w-[250px] bg-[#1f6dc2] hover:bg-emc-yellow/90 text-[#fbde0e] font-bold rounded-full px-6 py-3">
+  <Button className="inline-flex items-center justify-start gap-2 min-w-[250px] bg-[#1f6dc2] hover:bg-emc-yellow/90 text-white font-bold rounded-full px-6 py-3">
     <FileDown /> Poster Lomba
   </Button>
 </a>
@@ -62,7 +63,7 @@ export default function Landing() {
   target="_blank"
   rel="noopener noreferrer"
 >
-  <Button className="inline-flex items-center justify-start gap-2 min-w-[250px] bg-[#1f6dc2] hover:bg-emc-yellow/90 text-[#fbde0e] font-bold rounded-full px-6 py-3">
+  <Button className="inline-flex items-center justify-start gap-2 min-w-[250px] bg-[#1f6dc2] hover:bg-emc-yellow/90 text-white font-bold rounded-full px-6 py-3">
     <FileDown /> Kisi Kisi Soal Lomba
   </Button>
 </a>
@@ -112,15 +113,7 @@ export default function Landing() {
             <div className="mb-6">
               <Image src={item.image} alt={item.title} width={480} height={480} className="mx-auto h-64 w-64 object-contain" />
             </div>
-            <h3 className="text-2xl font-bold text-emc-yellow mb-3">{item.title}</h3>
-            <p className="text-base text-blue-100">{item.description}</p>
-            <div className="mt-auto" />
           </CardContent>
-
-          {/* Decorative elements */}
-          <div className="absolute top-2 right-2 w-4 h-4 bg-orange-400 rounded-full opacity-70" />
-          <div className="absolute bottom-4 left-4 w-3 h-3 bg-green-400 rounded-full opacity-60" />
-          <div className="absolute top-1/2 right-4 text-emc-yellow text-lg">⚡</div>
         </Card>
       ))}
     </div>
@@ -262,6 +255,8 @@ export default function Landing() {
 
         </div>
       </section>
+
+      {/* Footer */}
 
     </div>
   );
