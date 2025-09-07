@@ -1,4 +1,4 @@
-# Cloudflare Workers SaaS Template
+# Cloudflare Workers SaaS Template.
 
 [![.github/workflows/deploy.yml](https://github.com/vousmeevoyez/bimbelaljabarplatinum-id-template/actions/workflows/deploy.yml/badge.svg)](https://github.com/vousmeevoyez/bimbelaljabarplatinum-id-template/actions/workflows/deploy.yml)
 

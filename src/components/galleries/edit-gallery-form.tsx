@@ -14,48 +14,55 @@ import {
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
-import { createMerchantAction } from "@/actions/merchant-actions";
-import { imageUploadSchema, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
+import { updateGalleryAction } from "@/actions/gallery-actions";
+import { imageUploadSpecDescription } from "@/schemas/image-upload.schema";
+import type { Gallery } from "@/db/schema";
 import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 
+
 const formSchema = z.object({
-  name: z.string().min(1, "Merchant name is required").max(100, "Merchant name is too long"),
-  description: z.string().max(1000, "Description is too long").optional(),
-}).extend({
-  image: imageUploadSchema.shape.image.nullable().optional(),
-});
+  description: z.string().max(1000, "Max 1000 characters").optional(),
+  image: z.instanceof(FileList).optional(),
+})
 
 type FormValues = z.infer<typeof formSchema>;
 
-export function CreateMerchantForm() {
+interface EditGalleryFormProps {
+  gallery: Gallery;
+}
+
+export function EditGalleryForm({ gallery }: EditGalleryFormProps) {
   const router = useRouter();
 
-  const { execute: createMerchant } = useServerAction(createMerchantAction, {
+  const { execute: updateGallery } = useServerAction(updateGalleryAction, {
     onError: (error) => {
       toast.dismiss();
-      toast.error(error.err?.message || "Failed to create merchant");
+      toast.error(error.err?.message || "Failed to update gallery item");
     },
     onStart: () => {
-      toast.loading("Creating merchant...");
+      toast.loading("Updating gallery item...");
     },
     onSuccess: () => {
       toast.dismiss();
-      toast.success("Merchant created successfully");
-      router.push(`/admin/merchants` as Route);
+      toast.success("Gallery item updated successfully");
+      router.push("/admin/galleries" as Route);
       router.refresh();
     }
   });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", description: "", image: undefined },
+    defaultValues: {
+      description: gallery.description || "",
+      image: undefined,
+    },
   });
 
   function onSubmit(data: FormValues) {
-    createMerchant({
-      name: data.name,
-      description: data.description?? undefined,
-      logo: data.image ?? undefined,
+    updateGallery({
+      galleryId: gallery.id,
+      description: data.description || undefined,
+      image: data.image && data.image.length > 0 ? data.image[0] : undefined,
     });
   }
 
@@ -64,27 +71,14 @@ export function CreateMerchantForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Merchant Name</FormLabel>
-              <FormControl><Input placeholder="Enter merchant name" {...field} /></FormControl>
-              <FormDescription>A unique name for your merchant</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="description"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder="Enter a brief description of your merchant" {...field} value={field.value || ""} />
+                <Textarea placeholder="Brief description (≤1000 chars)" {...field} value={field.value || ""} />
               </FormControl>
-              <FormDescription>Optional description of your merchant&apos;s purpose</FormDescription>
+              <FormDescription>Optional description for your gallery item</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -95,25 +89,23 @@ export function CreateMerchantForm() {
           name="image"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Logo</FormLabel>
+              <FormLabel>Gallery Image</FormLabel>
               <FormControl>
                 <Input
                   type="file"
                   accept={ACCEPTED_IMAGE_TYPES.join(",")}
                   onChange={(e) => field.onChange(e.target.files)}
-                  // RHF file inputs should not bind `value`; rely on ref for registration:
                   ref={field.ref}
                 />
               </FormControl>
-              <FormDescription>{`Optional logo for your merchant.`}<br/> {imageUploadSpecDescription()}</FormDescription>
+              <FormDescription>{imageUploadSpecDescription()}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
-        <Button type="submit" className="w-full">Create Merchant</Button>
+        <Button type="submit" className="w-full">Update Gallery Item</Button>
       </form>
     </Form>
   );
 }
-

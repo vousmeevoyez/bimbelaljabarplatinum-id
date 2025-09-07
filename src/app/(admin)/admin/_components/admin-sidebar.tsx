@@ -7,6 +7,7 @@ import {
   Shield,
   Store,
   ShoppingBag,
+  Images
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -48,6 +49,11 @@ const adminNavItems: NavMainItem[] = [
     title: "Users",
     url: "/admin/users",
     icon: Users,
+  },
+  {
+    title: "Galleries",
+    url: "/admin/galleries",
+    icon: Images,
   },
 ]
 

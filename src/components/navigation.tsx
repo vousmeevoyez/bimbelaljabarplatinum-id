@@ -44,6 +44,7 @@ export function Navigation() {
 
   const navItems: NavItem[] = [
     { name: "Home", href: "/" },
+    { name: "Products", href: "/products" },
     ...(session ? [
       { name: "Settings", href: "/settings" },
       { name: "Dashboard", href: "/dashboard" },

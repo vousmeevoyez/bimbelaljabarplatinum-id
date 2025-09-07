@@ -11,20 +11,25 @@ import {
 
 type DeleteResult = { success: boolean };
 
-export function DeleteConfirmation<T extends { merchantId: string } | { productId: string }>({
+export function DeleteConfirmation<T extends { merchantId: string } | { productId: string } | { galleryId: string }>({
   id, name, action, type = "merchant"
 }: {
   id: string;
-  name: string;
+  name: string | null;
   action: (input: T) => Promise<[DeleteResult | null, unknown | null]>;
-  type?: "merchant" | "product";
+  type?: "merchant" | "product" | "gallery";
 }) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const onConfirm = () =>
     startTransition(async () => {
-      const [res] = await action((type === "merchant" ? { merchantId: id } : { productId: id }) as T);
+      const input = type === "merchant" 
+        ? { merchantId: id } 
+        : type === "product" 
+        ? { productId: id }
+        : { galleryId: id };
+      const [res] = await action(input as T);
       if (res?.success) router.refresh();
       // else handle toast/error if desired
     });
@@ -38,7 +43,7 @@ export function DeleteConfirmation<T extends { merchantId: string } | { productI
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Delete “{name}”?</AlertDialogTitle>
+          <AlertDialogTitle>Delete &quot;{name || 'this item'}&quot;?</AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. All data may be permanently removed.
           </AlertDialogDescription>

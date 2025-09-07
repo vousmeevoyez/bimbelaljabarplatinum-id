@@ -4,6 +4,7 @@ import { z } from "zod";
 import { createMerchant, deleteMerchant, getMerchant, getMerchants, updateMerchant } from "@/server/merchants";
 import { ZSAError, createServerAction } from "zsa";
 import { uploadToR2 } from "@/lib/s3";
+import { MAX_IMAGE_SIZE } from "@/constants";
 
 // Update merchant schema
 const updateMerchantSchema = z.object({
@@ -14,7 +15,7 @@ const updateMerchantSchema = z.object({
     .refine(file => file.type.startsWith("image/"), {
       message: "Only image files are allowed",
     })
-    .refine(file => file.size <= 2 * 1024 * 1024, {
+    .refine(file => file.size <= MAX_IMAGE_SIZE, {
       message: "File must be 2MB or smaller",
     })
     .optional(),
@@ -35,7 +36,7 @@ const createMerchantSchema = z.object({
     .refine(file => file.type.startsWith("image/"), {
       message: "Only image files are allowed",
     })
-    .refine(file => file.size <= 2 * 1024 * 1024, {
+    .refine(file => file.size <= MAX_IMAGE_SIZE, {
       message: "File must be 2MB or smaller",
     })
     .optional(),

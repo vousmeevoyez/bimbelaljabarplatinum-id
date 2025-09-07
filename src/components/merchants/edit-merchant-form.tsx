@@ -16,7 +16,8 @@ import {
 import { useRouter } from "next/navigation";
 import { useServerAction } from "zsa-react";
 import { updateMerchantAction } from "@/actions/merchant-actions";
-import { imageUploadSchema, ACCEPTED_IMAGE_TYPES, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
+import { imageUploadSchema, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
+import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 
 const baseSchema = z.object({
   name: z.string().min(1, "Merchant name is required").max(100, "Merchant name is too long"),

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { createProduct, deleteProduct, getProduct, getProducts, updateProduct } from "@/server/products";
 import { ZSAError, createServerAction } from "zsa";
 import { uploadToR2 } from "@/lib/s3";
+import { MAX_IMAGE_SIZE } from "@/constants";
 
 // Update product schema
 const updateProductSchema = z.object({
@@ -17,7 +18,7 @@ const updateProductSchema = z.object({
     .refine(file => file.type.startsWith("image/"), {
       message: "Only image files are allowed",
     })
-    .refine(file => file.size <= 2 * 1024 * 1024, {
+    .refine(file => file.size <= MAX_IMAGE_SIZE, {
       message: "File must be 2MB or smaller",
     })
     .optional(),
@@ -41,7 +42,7 @@ const createProductSchema = z.object({
     .refine(file => file.type.startsWith("image/"), {
       message: "Only image files are allowed",
     })
-    .refine(file => file.size <= 2 * 1024 * 1024, {
+    .refine(file => file.size <= MAX_IMAGE_SIZE, {
       message: "File must be 2MB or smaller",
     })
     .optional(),

@@ -16,7 +16,8 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
 import { createProductAction } from "@/actions/product-actions";
-import { imageUploadSchema, ACCEPTED_IMAGE_TYPES, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
+import { imageUploadSchema, imageUploadSpecDescription } from "@/schemas/image-upload.schema";
+import { ACCEPTED_IMAGE_TYPES } from "@/constants";
 
 const formSchema = z.object({
   merchantId: z.string().min(1, "Merchant is required"),
