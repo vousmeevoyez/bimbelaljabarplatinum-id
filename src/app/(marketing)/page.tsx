@@ -1,13 +1,12 @@
-import { ArrowRight, FileDown, Phone, MapPin, Instagram, Facebook } from 'lucide-react'
+import { ArrowRight, FileDown } from 'lucide-react'
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import { CountdownTimer } from "@/components/countdown-timer";
-import { Separator } from '@/components/ui/separator';
+import { BackgroundAudio } from '@/components/background-audio';
 
 export default function Landing() {
       const targetDate = new Date("2025-09-10T00:00:00");
-const numbers = [1,2,3,4,5,6,7,8,9];
 
   const features = [
   { title: "Yayasan Suara Pelajar Indonesia", description: "Menaungi 2 sekolah: SDI Plus Darul Ulum Limo SMP Islam Darul Ulum Ilmi Limo", image: "/card-1.png", bgColor: "bg-emc-blue" },
@@ -17,6 +16,7 @@ const numbers = [1,2,3,4,5,6,7,8,9];
 ];
 
   return (
+    <>
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="relative min-h-[80vh] flex items-center overflow-hidden" style={{ backgroundImage: 'url(/bg-1.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
@@ -137,7 +137,7 @@ const numbers = [1,2,3,4,5,6,7,8,9];
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
       {/* Left: Placeholder Image */}
       <div className="flex justify-center">
-        <img
+        <Image
           src="/trophy.png"
           alt="Winner Podium"
           className="rounded-xl shadow-lg"
@@ -259,5 +259,12 @@ const numbers = [1,2,3,4,5,6,7,8,9];
       {/* Footer */}
 
     </div>
+            <BackgroundAudio
+        src="/audio-bimbelaljabarplatinum-id-compressed.mp3"
+        loop
+        volume={0.3}
+        autoplay
+      />
+    </>
   );
 }
