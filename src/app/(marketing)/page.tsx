@@ -1,66 +1,33 @@
-// app/galleries/page.tsx
-import { notFound } from "next/navigation";
-import { Separator } from "@/components/ui/separator";
-import { getGalleriesAction } from "@/actions/gallery-actions";
-import { getPresignedR2Url } from "@/lib/s3";
-import { GalleryGrid } from "@/components/galleries/gallery-grid";
-
-export const revalidate = 0;
-
-// Extended gallery type for display purposes
-type GalleryDisplay = {
-  id: string;
-  src: string;
-  title: string;
-  subtitle?: string;
-  description: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  updateCounter: number | null;
-};
+import { BackgroundAudio } from "@/components/background-audio";
+import { CountdownTimer } from "@/components/countdown-timer";
 
 export default async function GalleriesIndexPage() {
-  const [result, error] = await getGalleriesAction({limit: 20});
-  let galleries: GalleryDisplay[] = [];
+    const targetDate = new Date("2025-09-08T00:00:00");
 
-  if (result?.success && result.data) {
-    galleries = await Promise.all(
-      result.data.map(async (data) => {
-        let src = "/placeholder-image.svg"; // fallback image
-        if (data.imageUrl) {
-          const presignedUrl = await getPresignedR2Url(data.imageUrl);
-          if (presignedUrl) src = presignedUrl;
-        }
-        
-        return {
-          id: data.id,
-          src,
-          title: data.description || "Untitled Gallery",
-          subtitle: undefined,
-          description: data.description,
-          createdAt: data.createdAt,
-          updatedAt: data.updatedAt,
-          updateCounter: data.updateCounter,
-        };
-      })
-    );
-  }
-  if (error) return notFound();
+    return <>
+        <div className="min-h-screen bg-gray-100 py-8">
+          <div className="container mx-auto px-4">
+            <CountdownTimer targetDate={targetDate} className="mb-8" />
 
-  return (
-    <main className="mx-auto max-w-6xl px-4 py-8 space-y-6">
-      <Separator />
+            <div className="flex items-center justify-center">
+              <div className="relative w-full max-w-4xl aspect-video shadow-md overflow-hidden rounded-lg">
+                <iframe
+                  loading="lazy"
+                  className="absolute w-full h-full top-0 left-0 border-0"
+                  src="https://www.canva.com/design/DAGyQowAtU0/bh9FdhaEFqQP1zgn4HmpEA/view?embed"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+          </div>
+        </div>
 
-      {/* Empty state */}
-      {galleries.length === 0 ? (
-        <section className="rounded-xl border p-6">
-          <h3 className="text-lg font-semibold">Belum ada foto</h3>
-          <p className="text-sm text-muted-foreground">Tambahkan foto untuk memulai.</p>
-        </section>
-      ) : null}
-
-      {/* Gallery Grid with Modal Functionality */}
-      <GalleryGrid galleries={galleries} />
-    </main>
-  );
+      <BackgroundAudio
+        src="/audio-bimbelaljabarplatinum-id-compressed.mp3"
+        loop
+        volume={0.3}
+        autoplay
+      />
+    </>
 }
+
