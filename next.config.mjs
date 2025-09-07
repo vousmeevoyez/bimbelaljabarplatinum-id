@@ -27,6 +27,7 @@ const nextConfig = {
         pathname: '/my-bucket-name/uploads/**',
       },
       { protocol: 'https', hostname: 'images.bimbelaljabarplatinum.id', pathname: '/**' },
+      { protocol: 'https', hostname: 'ext.same-assets.com', pathname: '/**' },
     ],
   },
 };

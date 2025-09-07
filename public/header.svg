@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="200" viewBox="0 0 800 200">
+  <!-- Transparent background -->
+  <rect width="800" height="200" fill="transparent"/>
+  
+  <!-- Mathematical symbols pattern in background -->
+  <g opacity="0.1" fill="#ffffff">
+    <!-- X symbols -->
+    <text x="50" y="50" font-family="Arial, sans-serif" font-size="24">X</text>
+    <text x="150" y="80" font-family="Arial, sans-serif" font-size="20">X</text>
+    <text x="650" y="40" font-family="Arial, sans-serif" font-size="22">X</text>
+    <text x="750" y="70" font-family="Arial, sans-serif" font-size="18">X</text>
+    
+    <!-- Y symbols -->
+    <text x="100" y="120" font-family="Arial, sans-serif" font-size="26">Y</text>
+    <text x="200" y="150" font-family="Arial, sans-serif" font-size="20">Y</text>
+    <text x="600" y="110" font-family="Arial, sans-serif" font-size="24">Y</text>
+    <text x="700" y="140" font-family="Arial, sans-serif" font-size="18">Y</text>
+    
+    <!-- Square root symbols -->
+    <text x="80" y="180" font-family="Arial, sans-serif" font-size="28">√</text>
+    <text x="180" y="200" font-family="Arial, sans-serif" font-size="22">√</text>
+    <text x="620" y="170" font-family="Arial, sans-serif" font-size="26">√</text>
+    <text x="720" y="190" font-family="Arial, sans-serif" font-size="20">√</text>
+    
+    <!-- Numbers -->
+    <text x="30" y="100" font-family="Arial, sans-serif" font-size="20">2</text>
+    <text x="250" y="60" font-family="Arial, sans-serif" font-size="18">+2</text>
+    <text x="550" y="90" font-family="Arial, sans-serif" font-size="22">2</text>
+    <text x="770" y="120" font-family="Arial, sans-serif" font-size="16">+2</text>
+  </g>
+  
+  <!-- Main text "Eduversal Presents" -->
+  <text x="400" y="100" font-family="Arial, sans-serif" font-size="36" font-weight="bold" text-anchor="middle" fill="#ffffff">
+    Eduversal Presents
+  </text>
+  
+  <!-- Underscore line -->
+  <line x1="300" y1="120" x2="500" y2="120" stroke="#ffff00" stroke-width="4" stroke-linecap="round"/>
+</svg>

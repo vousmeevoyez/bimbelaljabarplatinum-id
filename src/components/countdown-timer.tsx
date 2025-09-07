@@ -56,12 +56,6 @@ export function CountdownTimer({ targetDate, className = "" }: CountdownTimerPro
 
   return (
     <div className={`text-center ${className}`}>
-      <div className="mb-2 md:mb-4">
-        <h2 className="text-lg md:text-2xl lg:text-3xl font-bold text-gray-800 mb-1 md:mb-2">
-          Hitung Mundur hingga 8 September 2025
-        </h2>
-      </div>
- 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-2xl mx-auto">
         <div className="bg-white rounded-lg shadow-md p-2 md:p-4 border-2 border-blue-200">
           <div className="text-xl md:text-3xl lg:text-4xl font-bold text-blue-600">
@@ -71,7 +65,7 @@ export function CountdownTimer({ targetDate, className = "" }: CountdownTimerPro
             Hari
           </div>
         </div>
- 
+
         <div className="bg-white rounded-lg shadow-md p-2 md:p-4 border-2 border-green-200">
           <div className="text-xl md:text-3xl lg:text-4xl font-bold text-green-600">
             {formatNumber(timeLeft.hours)}
@@ -80,7 +74,7 @@ export function CountdownTimer({ targetDate, className = "" }: CountdownTimerPro
             Jam
           </div>
         </div>
- 
+
         <div className="bg-white rounded-lg shadow-md p-2 md:p-4 border-2 border-yellow-200">
           <div className="text-xl md:text-3xl lg:text-4xl font-bold text-yellow-600">
             {formatNumber(timeLeft.minutes)}
@@ -89,7 +83,7 @@ export function CountdownTimer({ targetDate, className = "" }: CountdownTimerPro
             Menit
           </div>
         </div>
- 
+
         <div className="bg-white rounded-lg shadow-md p-2 md:p-4 border-2 border-red-200">
           <div className="text-xl md:text-3xl lg:text-4xl font-bold text-red-600">
             {formatNumber(timeLeft.seconds)}
