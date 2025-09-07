@@ -21,7 +21,7 @@ export default function Landing() {
 
         {/* Header Banner - Centered and Transparent */}
         <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
-          <h1 className="md:text-2xl text-xl font-bold text-white mb-2">
+          <h1 className="md:text-2xl text-xl font-bold text-[#fbde0e] mb-2">
             Membumikan Matematika
           </h1>
           <div className="w-48 h-1 bg-yellow-400 mx-auto rounded"></div>
@@ -196,10 +196,13 @@ export default function Landing() {
 </section>
 
        {/* Gallery Section */}
-      <section className="py-16 bg-emc-yellow">
+<section
+  className="relative flex items-center overflow-hidden py-12"
+  style={{ backgroundImage: 'url(/bg-2.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+>
         <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-4xl font-bold text-emc-blue text-center mb-12">
-            Galeri AJP
+          <h2 className="text-4xl font-bold text-[#fbde0e] text-center mb-12">
+            Galeri YASPI
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
@@ -207,6 +210,43 @@ export default function Landing() {
               "/wa-1.jpeg",
               "/wa-2.jpeg",
               "/wa-3.jpeg",
+              "/wa-4.jpeg",
+              "/wa-5.jpeg",
+              "/wa-6.jpeg",
+            ].map((src, index) => (
+              <div key={index} className="aspect-square rounded-lg overflow-hidden border-4 border-white shadow-lg">
+                <Image
+                  src={src}
+                  alt={`Gallery ${index + 1}`}
+                  width={300}
+                  height={300}
+                  className="w-full h-full object-cover hover:scale-105 transition-transform"
+                />
+              </div>
+            ))}
+          </div>
+
+        </div>
+      </section>
+
+       {/* Gallery Section */}
+<section
+  className="relative flex items-center overflow-hidden py-12"
+  style={{ backgroundImage: 'url(/bg-2.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}
+>
+        <div className="max-w-7xl mx-auto px-6">
+          <h2 className="text-4xl font-bold text-[#fbde0e] text-center mb-12">
+            Galeri AJP
+          </h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mb-8">
+            {[
+              "/wa-7.jpeg",
+              "/wa-8.jpeg",
+              "/wa-9.jpeg",
+              "/wa-10.jpeg",
+              "/wa-11.jpeg",
+              "/wa-12.jpeg",
             ].map((src, index) => (
               <div key={index} className="aspect-square rounded-lg overflow-hidden border-4 border-white shadow-lg">
                 <Image
