@@ -24,16 +24,16 @@ export default function Landing() {
         {/* Header Banner - Centered and Transparent */}
 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
   <div className="flex items-center justify-center space-x-4">
-    <img src="/LOGO.png" alt="Left Logo" className="w-24 h-24" />
+    <img src="/LOGO.png" alt="Left Logo" className="w-20 h-20" />
     <h1 className="md:text-2xl text-xl font-bold text-[#fbde0e] mb-2">
       Membumikan Matematika
     </h1>
-    <img src="/LOGO2.png" alt="Right Logo" className="w-24 h-24" />
+    <img src="/LOGO2.png" alt="Right Logo" className="w-20 h-20" />
   </div>
   <div className="w-48 h-1 bg-yellow-400 mx-auto rounded"></div>
 </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center md:pt-8">
   <div className="text-white space-y-6 md:mt-12 mt-24">
     <h1 className="md:text-3xl text-2xl font-bold leading-tight mt-10">
       Lomba Matematika Nasional No 1 di Indonesia dengan materi sesuai kurikulum sekolah.
@@ -335,14 +335,14 @@ JL Nubala, RT 04/RW17, Pisangan, Kec Ciputat, Kota Tangerang Selatan</span>
                   rel="noopener noreferrer"
                   className="text-center font-bold bg-green-600 hover:bg-green-700 rounded-xl py-3 shadow-lg"
                 >
-                    SD
+                    SDI Plus Darul ULUM
                 </a>
                 <a
                   href="https://maps.app.goo.gl/5iqt5hWZccMeq6Jh8?g_st=awb"
                   rel="noopener noreferrer"
                   className="text-center font-bold bg-black/70 hover:bg-black/80 rounded-xl py-3 shadow-lg"
                 >
-                    SMP
+                    SMP Islam Darul Ilmi
                 </a>
               </div>
             </div>
