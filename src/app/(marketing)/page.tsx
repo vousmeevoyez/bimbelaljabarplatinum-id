@@ -22,12 +22,16 @@ export default function Landing() {
       <section className="relative min-h-[80vh] flex items-center overflow-hidden" style={{ backgroundImage: 'url(/bg-1.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
 
         {/* Header Banner - Centered and Transparent */}
-        <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
-          <h1 className="md:text-2xl text-xl font-bold text-[#fbde0e] mb-2">
-            Membumikan Matematika
-          </h1>
-          <div className="w-48 h-1 bg-yellow-400 mx-auto rounded"></div>
-        </div>
+<div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
+  <div className="flex items-center justify-center space-x-4">
+    <img src="/LOGO.png" alt="Left Logo" className="w-24 h-24" />
+    <h1 className="md:text-2xl text-xl font-bold text-[#fbde0e] mb-2">
+      Membumikan Matematika
+    </h1>
+    <img src="/LOGO2.png" alt="Right Logo" className="w-24 h-24" />
+  </div>
+  <div className="w-48 h-1 bg-yellow-400 mx-auto rounded"></div>
+</div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
   <div className="text-white space-y-6 md:mt-12 mt-24">
@@ -35,7 +39,7 @@ export default function Landing() {
       Lomba Matematika Nasional No 1 di Indonesia dengan materi sesuai kurikulum sekolah.
     </h1>
 
-    <p className="text-xl text-white">
+    <p className="text-xl text-black">
       Mendukung Materi SD, SMP, hingga SMA (TKA dan UTBK).
     </p>
 
@@ -50,7 +54,7 @@ export default function Landing() {
   </Button>
 </a>
 <a
-  href="/flyer.png"
+  href="https://drive.google.com/file/d/1IJLg5xLpCCTkjFZ54v0yDHWumyjHNK_I/view"
   target="_blank"
   rel="noopener noreferrer"
 >
@@ -278,8 +282,8 @@ export default function Landing() {
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
                 >
-                  <Phone className="group-hover:scale-110 transition" />
-                  <span className="font-semibold">+62 895 1546 6266</span>
+                  <Phone className="group-hover:scale-110 transition text-white" />
+                  <span className="font-semibold text-white">+62 895 1546 6266</span>
                 </a>
                 <a
                   href="#"
@@ -287,8 +291,8 @@ export default function Landing() {
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
                 >
-                  <MapPinHouse className="group-hover:scale-110 transition" />
-                  <span className="font-semibold line-clamp-2">Bimbel Aljabar Platinum
+                  <MapPinHouse className="group-hover:scale-110 transition text-white" />
+                  <span className="font-semibold line-clamp-2 text-white">Bimbel Aljabar Platinum
 JL Nubala, RT 04/RW17, Pisangan, Kec Ciputat, Kota Tangerang Selatan</span>
                 </a>
                 <a
@@ -297,8 +301,8 @@ JL Nubala, RT 04/RW17, Pisangan, Kec Ciputat, Kota Tangerang Selatan</span>
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
                 >
-                  <Instagram className="group-hover:scale-110 transition" />
-                  <span className="font-semibold">@aljabar_platinum</span>
+                  <Instagram className="group-hover:scale-110 transition text-white" />
+                  <span className="font-semibold text-white">@aljabar_platinum</span>
                 </a>
                 <a
                   href="https://facebook.com/BimbelAljabarPlatinum"
@@ -306,8 +310,8 @@ JL Nubala, RT 04/RW17, Pisangan, Kec Ciputat, Kota Tangerang Selatan</span>
                   rel="noopener noreferrer"
                   className="group inline-flex items-center gap-3 px-4 py-3 rounded-full bg-white/15 hover:bg-white/25 transition shadow"
                 >
-                  <Facebook className="group-hover:scale-110 transition" />
-                  <span className="font-semibold">Bimbel AljabarPlatinum</span>
+                  <Facebook className="group-hover:scale-110 transition text-white" />
+                  <span className="font-semibold text-white">Bimbel AljabarPlatinum</span>
                 </a>
               </div>
             </div>
