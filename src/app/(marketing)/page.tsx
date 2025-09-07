@@ -25,7 +25,7 @@ export default function Landing() {
 <div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
   <div className="flex items-center justify-center space-x-4">
     <Image src="/LOGO.png" alt="Left Logo" width={80} height={80} className="w-20 h-20" />
-    <h1 className="md:text-2xl text-xl font-bold text-[#fbde0e] mb-2">
+    <h1 className="md:text-2xl text-xl font-bold text-[#fbde0e] mb-2 font-garden-flower">
       Membumikan Matematika
     </h1>
     <Image src="/LOGO3.png" alt="Right Logo" width={80} height={80}/>

@@ -1,3 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Pacifico&display=swap');
+
+/* Garden Flower Font - Add font files to public/fonts/ directory when available */
+@font-face {
+  font-family: 'Garden Flower';
+  src: url('/fonts/GardenFlower.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -12,6 +12,11 @@ const config: Config = {
   ],
   theme: {
   	extend: {
+  		fontFamily: {
+  			'garden-flower': ['Garden Flower', 'Dancing Script', 'cursive'],
+  			'dancing-script': ['Dancing Script', 'cursive'],
+  			'pacifico': ['Pacifico', 'cursive'],
+  		},
   		backgroundImage: {
   			'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
   			'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
