@@ -19,22 +19,40 @@ export default function Landing() {
     <>
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="relative min-h-[80vh] flex items-center overflow-hidden" style={{ backgroundImage: 'url(/bg-1.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+<section
+  className="relative min-h-[80vh] flex flex-col items-center justify-center overflow-hidden py-3"
+  style={{
+    backgroundImage: 'url(/bg-1.png)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+  }}
+>
 
-        {/* Header Banner - Centered and Transparent */}
-<div className="absolute top-8 left-1/2 transform -translate-x-1/2 z-20 text-center">
-  <div className="flex items-center justify-center space-x-4">
-    <Image src="/LOGO.png" alt="Left Logo" width={80} height={80} className="w-20 h-20" />
-    <h1 className="md:text-2xl text-xl font-bold text-[#fbde0e] mb-2 font-garden-flower">
-      Membumikan Matematika
-    </h1>
-    <Image src="/LOGO3.png" alt="Right Logo" width={80} height={80}/>
+        {/* Header Banner - Redesigned Layout */}
+              <div className="flex flex-col items-center text-center mt-6">
+
+
+  {/* Logos above the line */}
+  <div className="flex items-center justify-center space-x-8 mb-4">
+    <Image src="/LOGO.png" alt="Left Logo" width={100} height={80} className="w-24 h-24" />
+    <Image src="/LOGO3.png" alt="Right Logo" width={100} height={80}className="pt-5"/>
+
   </div>
-  <div className="w-48 h-1 bg-yellow-400 mx-auto rounded"></div>
+
+  {/* Yellow line separator */}
+  <div className="w-64 h-1 bg-yellow-400 mx-auto rounded mb-4"></div>
+
+  {/* Text below the line - larger and more prominent */}
+  <h1 className="md:text-4xl text-3xl font-bold text-[#fbde0e] font-garden-flower drop-shadow-lg">
+    Membumikan Matematika
+  </h1>
 </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center md:pt-8">
-  <div className="text-white space-y-6 md:mt-12 mt-24">
+
+            <div className="max-w-7xl mx-auto px-6 flex flex-col lg:flex-row gap-12 items-center">
+
+  <div className="text-white">
     <h1 className="md:text-3xl text-2xl font-bold leading-tight mt-10">
       Lomba Matematika Nasional No 1 di Indonesia dengan materi sesuai kurikulum sekolah.
     </h1>
@@ -43,6 +61,7 @@ export default function Landing() {
       Mendukung Materi SD, SMP, hingga SMA (TKA dan UTBK).
     </p>
 
+              <br/>
             <div className="flex flex-col gap-4 items-start">
 <a
   href="https://docs.google.com/document/d/1PCtFpuN7aHbpEAqDQaPdrJqsUSmlh4336QpYamsNBS0/edit?tab=t.0"
