@@ -45,7 +45,7 @@ export default function Landing() {
 
   {/* Text below the line - larger and more prominent */}
   <h1 className="md:text-4xl text-3xl font-bold text-[#fbde0e] font-garden-flower drop-shadow-lg">
-    Membumikan Matematika
+    Membumikan Matematika.
   </h1>
 </div>
 
