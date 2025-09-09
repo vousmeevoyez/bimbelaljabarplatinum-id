@@ -6,7 +6,7 @@ import { CountdownTimer } from "@/components/countdown-timer";
 import { BackgroundAudio } from '@/components/background-audio';
 
 export default function Landing() {
-      const targetDate = new Date("2025-09-10T00:00:00");
+      const targetDate = new Date("2025-09-13T00:00:00");
 
   const features = [
   { title: "Yayasan Suara Pelajar Indonesia", description: "Menaungi 2 sekolah: SDI Plus Darul Ulum Limo SMP Islam Darul Ulum Ilmi Limo", image: "/card-1.png", bgColor: "bg-emc-blue" },
