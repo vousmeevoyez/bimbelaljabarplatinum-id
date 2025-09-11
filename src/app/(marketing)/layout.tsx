@@ -3,22 +3,22 @@ import NavFooterLayout from "@/layouts/NavFooterLayout";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Merchants",
-  description: "Browse all merchants and their products.",
+  title: "AJP EXPO 2025",
+  description: "Hai! kawan-kawan seluruh nusantara👋🏻 Ikuti lomba matematika nasional yuk, hadiah jutaan rupiah, sertifikat goes to terkurasi puspresnas plus dapat kisi-kisi soal sesuai materi sekolah. Info lengkap klik https://bimbelaljabarplatinum.id/",
   openGraph: {
-    title: "Merchants",
-    description: "Browse all merchants and their products.",
+    title: "AJP EXPO 2025",
+    description: "Hai! kawan-kawan seluruh nusantara👋🏻 Ikuti lomba matematika nasional yuk, hadiah jutaan rupiah, sertifikat goes to terkurasi puspresnas plus dapat kisi-kisi soal sesuai materi sekolah. Info lengkap klik https://bimbelaljabarplatinum.id/",
     type: "website",
-    url: "/merchants",
-    images: [{ url: "/merchants/opengraph-image", width: 1200, height: 630, alt: "Merchants overview" }],
+    url: "https://bimbelaljabarplatinum.id/",
+    images: [{ url: "https://bimbelaljabarplatinum.id/LOGO.png", width: 1200, height: 630, alt: "Merchants overview" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Merchants",
-    description: "Browse all merchants and their products.",
-    images: ["/merchants/opengraph-image"],
+    title: "AJP EXPO 2025",
+    description: "Hai! kawan-kawan seluruh nusantara👋🏻 Ikuti lomba matematika nasional yuk, hadiah jutaan rupiah, sertifikat goes to terkurasi puspresnas plus dapat kisi-kisi soal sesuai materi sekolah. Info lengkap klik https://bimbelaljabarplatinum.id/",
+    images: ["https://bimbelaljabarplatinum.id/LOGO.png"],
   },
-  alternates: { canonical: "/merchants" },
+  alternates: { canonical: "https://bimbelaljabarplatinum.id/" },
   robots: { index: true, follow: true },
 };
 
