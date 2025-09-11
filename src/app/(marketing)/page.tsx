@@ -117,7 +117,7 @@ export default function Landing() {
             <CountdownTimer  targetDate={targetDate}/>
           </div>
           <div className="flex justify-center gap-6 mb-8">
-              Mulai lomba babak penyisihan tiap kota 15 september 2025 sd 10 oktober 2025
+              Mulai lomba babak penyisihan tiap kota 25 september 2025 sd 10 oktober 2025
           </div>
         </div>
       </section>
